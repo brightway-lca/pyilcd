@@ -3,7 +3,7 @@
 <flowPropertyDataSet xmlns="http://lca.jrc.it/ILCD/FlowProperty"
    xmlns:common="http://lca.jrc.it/ILCD/Common"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://lca.jrc.it/ILCD/FlowProperty ../../schemas/ILCD_FlowPropertyDataSet.xsd"
+   xsi:schemaLocation="http://lca.jrc.it/ILCD/FlowProperty ../pyilcd/schemas/ilcd/ILCD_FlowPropertyDataSet.xsd"
    version="1.1">
    <flowPropertiesInformation>
       <dataSetInformation>

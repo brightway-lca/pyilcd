@@ -3,7 +3,7 @@
 <processDataSet xmlns="http://lca.jrc.it/ILCD/Process"
    xmlns:common="http://lca.jrc.it/ILCD/Common"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://lca.jrc.it/ILCD/Process ../../schemas/ILCD_ProcessDataSet.xsd"
+   xsi:schemaLocation="http://lca.jrc.it/ILCD/Process ../pyilcd/schemas/ilcd/ILCD_ProcessDataSet.xsd"
    version="1.1"
    locations="../Example_Custom_Locations.xml"
    metaDataOnly="false">

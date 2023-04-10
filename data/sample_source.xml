@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="../../stylesheets/source2html.xsl"?>
 <sourceDataSet xmlns="http://lca.jrc.it/ILCD/Source" xmlns:common="http://lca.jrc.it/ILCD/Common"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://lca.jrc.it/ILCD/Source ../../schemas/ILCD_SourceDataSet.xsd"
+   xsi:schemaLocation="http://lca.jrc.it/ILCD/Source ../pyilcd/schemas/ilcd/ILCD_SourceDataSet.xsd"
    version="1.1">
    <sourceInformation>
       <dataSetInformation>

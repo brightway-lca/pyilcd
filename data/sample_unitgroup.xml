@@ -3,7 +3,7 @@
 <unitGroupDataSet xmlns="http://lca.jrc.it/ILCD/UnitGroup"
    xmlns:common="http://lca.jrc.it/ILCD/Common"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://lca.jrc.it/ILCD/UnitGroup ../../schemas/ILCD_UnitGroupDataSet.xsd"
+   xsi:schemaLocation="http://lca.jrc.it/ILCD/UnitGroup ../pyilcd/schemas/ilcd/ILCD_UnitGroupDataSet.xsd"
    version="1.1">
    <unitGroupInformation>
       <dataSetInformation>
