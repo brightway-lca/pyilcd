@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="../../stylesheets/flow2html.xsl"?>
 <flowDataSet xmlns="http://lca.jrc.it/ILCD/Flow" xmlns:common="http://lca.jrc.it/ILCD/Common"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://lca.jrc.it/ILCD/Flow ../pyilcd/schemas/ilcd/ILCD_FlowDataSet.xsd"
+   xsi:schemaLocation="http://lca.jrc.it/ILCD/Flow ../pyilcd/schemas/ILCD_FlowDataSet.xsd"
    version="1.1"
    locations="../ILCDLocations.xml">
    <flowInformation>
