@@ -1,1 +1,2 @@
 include pyilcd/VERSION
+include pyilcd/schemas/*/*.xsd
