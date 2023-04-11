@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <?xml-stylesheet type="text/xsl" href="../../stylesheets/process2html.xsl"?>
 <processDataSet xmlns="http://lca.jrc.it/ILCD/Process"
    xmlns:common="http://lca.jrc.it/ILCD/Common"
@@ -492,7 +492,7 @@
          <common:referenceToDataSetFormat type="source data set"
             uri="../sources/ILCD_Format_a97a0155-0234-4b87-b4ce-a45da52f2a40.xml"
             refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40">
-            <common:shortDescription>ILCD format</common:shortDescription>
+            <common:shortDescription xml:lang="en">ILCD format</common:shortDescription>
             <!--<common:other/>-->
          </common:referenceToDataSetFormat>
          <common:referenceToDataSetFormat type="source data set"

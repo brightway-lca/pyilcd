@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <?xml-stylesheet type="text/xsl" href="../../stylesheets/flowproperty2html.xsl"?>
 <flowPropertyDataSet xmlns="http://lca.jrc.it/ILCD/FlowProperty"
    xmlns:common="http://lca.jrc.it/ILCD/Common"
