@@ -16,12 +16,18 @@ class Defaults:
     SCHEMA_PROCESS_DATASET: ClassVar[str] = os.path.join(
         SCHEMA_DIR, "ILCD_ProcessDataSet.xsd"
     )
+    SCHEMA_FLOW_DATASET: ClassVar[str] = os.path.join(
+        SCHEMA_DIR, "ILCD_FlowDataSet.xsd"
+    )
 
     DYNAMIC_DEFAULTS: ClassVar[
         Dict[str, Dict[str, Callable[[etree.ElementBase], str]]]
     ] = {}
     STATIC_DEFAULTS: ClassVar[Dict[str, Dict[str, str]]] = {
         "Classification": {
+            "name": "ILCD",
+        },
+        "FlowCategorization": {
             "name": "ILCD",
         },
         "ProcessDataset": {

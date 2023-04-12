@@ -1,15 +1,15 @@
-"""Custom ILCD Python classes for ProcessDataset of ILCD schema."""
+"""Custom ILCD Python classes for ProcessDataSet of ILCD schema."""
 from typing import List
 
 from lxml import etree
 from lxmlh import get_element, get_element_list
 
 from .common import (
-    ClassificationInformation,
     CommissionerAndGoal,
     ComplianceGroup,
     DataEntryByGroup1,
     DataEntryByGroup2,
+    FlowCategoryInformation,
     GlobalReference,
     PublicationAndOwnershipGroup1,
     PublicationAndOwnershipGroup2,
@@ -239,11 +239,11 @@ class DataSetInformation(etree.ElementBase):
     and that together represent the complete inventory. Care has to be taken when
     naming the reference flow, to avoid misinterpretation.."""
 
-    commonSynonyms = create_attribute_list_process_dataset("common:synonyms", str)
+    synonyms = create_attribute_list_process_dataset("common:synonyms", str)
     """Synonyms / alternative names / brands of the good, service, or
     process. Separated by semicolon."""
 
-    commonGeneralComment = create_attribute_list_process_dataset(
+    generalComments = create_attribute_list_process_dataset(
         "common:generalComment", str
     )
     """General information about the data set, including e.g. general
@@ -266,7 +266,7 @@ class DataSetInformation(etree.ElementBase):
         return get_element(self, "complementingProcesses")
 
     @property
-    def classificationInformation(self) -> "ClassificationInformation":
+    def classificationInformation(self) -> "FlowCategoryInformation":
         """Hierarchical classification of the good, service, or process.
         (Note: This entry is NOT required for the identification of a Process. It should
         nevertheless be avoided to use identical names for Processes in the same

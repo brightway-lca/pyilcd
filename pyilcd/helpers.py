@@ -14,13 +14,33 @@ def create_attribute_process_dataset(
     return create_attribute(name, attr_type, Defaults.SCHEMA_PROCESS_DATASET, validator)
 
 
+def create_attribute_flow_dataset(
+    name: str, attr_type: type, validator: Optional[Callable] = None
+) -> property:
+    """Helper wrapper method for creating setters and getters for an ilcd
+    Flow Dataset attribute"""
+    return create_attribute(name, attr_type, Defaults.SCHEMA_FLOW_DATASET, validator)
+
+
 def create_element_text_process_dataset(name: str, element_type: type) -> property:
     """Helper wrapper method for creating setters and getters for an ilcd
     Process Dataset element text"""
     return create_element_text(name, element_type, Defaults.SCHEMA_PROCESS_DATASET)
 
 
+def create_element_text_flow_dataset(name: str, element_type: type) -> property:
+    """Helper wrapper method for creating setters and getters for an ilcd
+    Flow Dataset element text"""
+    return create_element_text(name, element_type, Defaults.SCHEMA_FLOW_DATASET)
+
+
 def create_attribute_list_process_dataset(name: str, attr_type: type) -> property:
     """Helper wrapper method for creating setters and getters for an ilcd
     Process Dataset element text list"""
     return create_attribute_list(name, attr_type, Defaults.SCHEMA_PROCESS_DATASET)
+
+
+def create_attribute_list_flow_dataset(name: str, attr_type: type) -> property:
+    """Helper wrapper method for creating setters and getters for an ilcd
+    Flow Dataset element text list"""
+    return create_attribute_list(name, attr_type, Defaults.SCHEMA_FLOW_DATASET)

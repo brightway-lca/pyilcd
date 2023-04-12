@@ -1,143 +1,208 @@
 """Core ILCD module containing parsing and saving functionalities."""
 from io import StringIO
 from pathlib import Path
-from typing import List, Tuple, Union
+from typing import Dict, List, Tuple, Union
 
 from lxml import etree
 from lxmlh.parsers import parse_directory, parse_file, save_file, validate_file
 
 from .common import (
+    Category,
     Class,
     Classification,
     ClassificationInformation,
     CommissionerAndGoal,
     DataQualityIndicator,
     DataQualityIndicators,
+    FlowCategorization,
+    FlowCategoryInformation,
     GlobalReference,
     Method,
     Scope,
 )
 from .config import Defaults
+from .flow_dataset import AdministrativeInformation as FlowAdministrativeInformation
+from .flow_dataset import Compliance as FlowCompliance
+from .flow_dataset import ComplianceDeclarations as FlowComplianceDeclarations
+from .flow_dataset import DataEntryBy as FlowDataEntryBy
+from .flow_dataset import DataSetInformation as FlowDataSetInformation
+from .flow_dataset import FlowDataSet, FlowInformation, FlowProperties, FlowProperty
+from .flow_dataset import Geography as FlowGeography
+from .flow_dataset import LCIMethod
+from .flow_dataset import ModellingAndValidation as FlowModellingAndValidation
+from .flow_dataset import Name as FlowName
+from .flow_dataset import PublicationAndOwnership as FlowPublicationAndOwnership
+from .flow_dataset import QuantitativeReference as FlowQuantitativeReference
+from .flow_dataset import Technology as FlowTechnology
 from .process_dataset import (
-    AdministrativeInformation,
+    AdministrativeInformation as ProcessAdministrativeInformation,
+)
+from .process_dataset import (
     Allocation,
     Allocations,
     ComplementingProcesses,
     Completeness,
     CompletenessElementaryFlows,
-    Compliance,
-    ComplianceDeclarations,
-    DataEntryBy,
-    DataGenerator,
-    DataSetInformation,
+)
+from .process_dataset import Compliance as ProcessCompliance
+from .process_dataset import ComplianceDeclarations as ProcessComplianceDeclarations
+from .process_dataset import DataEntryBy as ProcessDataEntryBy
+from .process_dataset import DataGenerator
+from .process_dataset import DataSetInformation as ProcessDataSetInformation
+from .process_dataset import (
     DataSourcesTreatmentAndRepresentativeness,
     Exchange,
     Exchanges,
-    Geography,
+)
+from .process_dataset import Geography as ProcessGeography
+from .process_dataset import (
     LCIAResult,
     LCIAResults,
     LCIMethodAndAllocation,
     LocationOfOperationSupplyOrProduction,
     MathematicalRelations,
-    ModellingAndValidation,
-    Name,
-    ProcessDataSet,
-    ProcessInformation,
-    PublicationAndOwnership,
-    QuantitativeReference,
+)
+from .process_dataset import ModellingAndValidation as ProcessModellingAndValidation
+from .process_dataset import Name as ProcessName
+from .process_dataset import ProcessDataSet, ProcessInformation
+from .process_dataset import PublicationAndOwnership as ProcessPublicationAndOwnership
+from .process_dataset import QuantitativeReference as ProcessQuantitativeReference
+from .process_dataset import (
     ReferencesToDataSource,
     Review,
     SubLocationOfOperationSupplyOrProduction,
-    Technology,
-    Time,
-    Validation,
-    VariableParameter,
 )
+from .process_dataset import Technology as ProcessTechnology
+from .process_dataset import Time, Validation, VariableParameter
+
+COMMON_LOOK_UP: Dict[str, type] = {
+    "allocation": Allocation,
+    "allocations": Allocations,
+    "dataSourcesTreatmentAndRepresentativeness": (
+        DataSourcesTreatmentAndRepresentativeness
+    ),
+    "category": Category,
+    "class": Class,
+    "classification": Classification,
+    "completeness": Completeness,
+    "completenessElementaryFlows": CompletenessElementaryFlows,
+    "complementingProcesses": ComplementingProcesses,
+    "commissionerAndGoal": CommissionerAndGoal,
+    "dataGenerator": DataGenerator,
+    "dataQualityIndicator": DataQualityIndicator,
+    "dataQualityIndicators": DataQualityIndicators,
+    "elementaryFlowCategorization": FlowCategorization,
+    "flowDataSet": FlowDataSet,
+    "flowInformation": FlowInformation,
+    "flowProperties": FlowProperties,
+    "flowProperty": FlowProperty,
+    "method": Method,
+    "scope": Scope,
+    "exchange": Exchange,
+    "exchanges": Exchanges,
+    "LCIAResult": LCIAResult,
+    "LCIAResults": LCIAResults,
+    "LCIMethod": LCIMethod,
+    "LCIMethodAndAllocation": LCIMethodAndAllocation,
+    "locationOfOperationSupplyOrProduction": (LocationOfOperationSupplyOrProduction),
+    "mathematicalRelations": MathematicalRelations,
+    "processDataSet": ProcessDataSet,
+    "processInformation": ProcessInformation,
+    "referenceToCommissioner": GlobalReference,
+    "referenceToComplementingProcess": GlobalReference,
+    "referenceToCompleteReviewReport": GlobalReference,
+    "referenceToComplianceSystem": GlobalReference,
+    "referenceToConvertedOriginalDataSetFrom": GlobalReference,
+    "referenceToDataHandlingPrinciples": GlobalReference,
+    "referenceToDataSetFormat": GlobalReference,
+    "referenceToDataSetUseApproval": GlobalReference,
+    "referenceToDataSource": GlobalReference,
+    "referenceToEntitiesWithExclusiveAccess": GlobalReference,
+    "referenceToExternalDocumentation": GlobalReference,
+    "referenceToFlowDataSet": GlobalReference,
+    "referenceToFlowPropertyDataSet": GlobalReference,
+    "referenceToIncludedProcesses": GlobalReference,
+    "referenceToLCAMethodDetails": GlobalReference,
+    "referenceToLCIAMethodDataSet": GlobalReference,
+    "referenceToNameOfReviewerAndInstitution": GlobalReference,
+    "referenceToOwnershipOfDataSet": GlobalReference,
+    "referenceToPersonOrEntityEnteringTheData": GlobalReference,
+    "referenceToPersonOrEntityGeneratingTheDataSet": GlobalReference,
+    "referenceToPrecedingDataSetVersion": GlobalReference,
+    "referenceToRegistrationAuthority": GlobalReference,
+    "referenceToSupportedImpactAssessmentMethods": GlobalReference,
+    "referenceToTechnicalSpecification": GlobalReference,
+    "referenceToTechnologyFlowDiagrammOrPicture": GlobalReference,
+    "referenceToTechnologyPictogramme": GlobalReference,
+    "referenceToUnchangedRepublication": GlobalReference,
+    "referencesToDataSource": ReferencesToDataSource,
+    "review": Review,
+    "subLocationOfOperationSupplyOrProduction": (
+        SubLocationOfOperationSupplyOrProduction
+    ),
+    "time": Time,
+    "validation": Validation,
+    "variableParameter": VariableParameter,
+}
+
+
+def _check_common_lookup(name: str) -> type:
+    try:
+        return COMMON_LOOK_UP[name]
+    except KeyError as exc:
+        raise KeyError(f"Element {name} can't be found in custom lookup.") from exc
 
 
 class ProcessDatasetLookup(etree.CustomElementClassLookup):
     """Custom XML lookup class for ILCD ProcessDataset files."""
 
-    def lookup(self, unused_node_type, unused_document, unused_namespace, name):
+    def lookup(self, unused_node_type, unused_document, unused_namespace, name) -> type:
         """Maps ILCD ProcessDataset XML elements to custom ProcessDataset classes."""
-        lookupMap = {
-            "administrativeInformation": AdministrativeInformation,
-            "allocation": Allocation,
-            "allocations": Allocations,
-            "dataEntryBy": DataEntryBy,
-            "dataGenerator": DataGenerator,
-            "dataSetInformation": DataSetInformation,
-            "dataSourcesTreatmentAndRepresentativeness": (
-                DataSourcesTreatmentAndRepresentativeness
-            ),
-            "class": Class,
-            "classification": Classification,
+        lookupMap: Dict[str, type] = {
+            "administrativeInformation": ProcessAdministrativeInformation,
+            "dataEntryBy": ProcessDataEntryBy,
+            "dataSetInformation": ProcessDataSetInformation,
             "classificationInformation": ClassificationInformation,
-            "completeness": Completeness,
-            "completenessElementaryFlows": CompletenessElementaryFlows,
-            "complementingProcesses": ComplementingProcesses,
-            "compliance": Compliance,
-            "complianceDeclarations": ComplianceDeclarations,
-            "commissionerAndGoal": CommissionerAndGoal,
-            "dataQualityIndicator": DataQualityIndicator,
-            "dataQualityIndicators": DataQualityIndicators,
-            "method": Method,
-            "scope": Scope,
-            "exchange": Exchange,
-            "exchanges": Exchanges,
-            "geography": Geography,
-            "LCIAResult": LCIAResult,
-            "LCIAResults": LCIAResults,
-            "LCIMethodAndAllocation": LCIMethodAndAllocation,
-            "locationOfOperationSupplyOrProduction": (
-                LocationOfOperationSupplyOrProduction
-            ),
-            "mathematicalRelations": MathematicalRelations,
-            "modellingAndValidation": ModellingAndValidation,
-            "name": Name,
-            "processDataSet": ProcessDataSet,
-            "processInformation": ProcessInformation,
-            "publicationAndOwnership": PublicationAndOwnership,
-            "quantitativeReference": QuantitativeReference,
-            "referenceToCommissioner": GlobalReference,
-            "referenceToComplementingProcess": GlobalReference,
-            "referenceToCompleteReviewReport": GlobalReference,
-            "referenceToComplianceSystem": GlobalReference,
-            "referenceToConvertedOriginalDataSetFrom": GlobalReference,
-            "referenceToDataHandlingPrinciples": GlobalReference,
-            "referenceToDataSetFormat": GlobalReference,
-            "referenceToDataSetUseApproval": GlobalReference,
-            "referenceToDataSource": GlobalReference,
-            "referenceToEntitiesWithExclusiveAccess": GlobalReference,
-            "referenceToExternalDocumentation": GlobalReference,
-            "referenceToFlowDataSet": GlobalReference,
-            "referenceToIncludedProcesses": GlobalReference,
-            "referenceToLCAMethodDetails": GlobalReference,
-            "referenceToLCIAMethodDataSet": GlobalReference,
-            "referenceToNameOfReviewerAndInstitution": GlobalReference,
-            "referenceToOwnershipOfDataSet": GlobalReference,
-            "referenceToPersonOrEntityEnteringTheData": GlobalReference,
-            "referenceToPersonOrEntityGeneratingTheDataSet": GlobalReference,
-            "referenceToPrecedingDataSetVersion": GlobalReference,
-            "referenceToRegistrationAuthority": GlobalReference,
-            "referenceToSupportedImpactAssessmentMethods": GlobalReference,
-            "referenceToTechnologyFlowDiagrammOrPicture": GlobalReference,
-            "referenceToTechnologyPictogramme": GlobalReference,
-            "referenceToUnchangedRepublication": GlobalReference,
-            "referencesToDataSource": ReferencesToDataSource,
-            "review": Review,
-            "subLocationOfOperationSupplyOrProduction": (
-                SubLocationOfOperationSupplyOrProduction
-            ),
-            "technology": Technology,
-            "time": Time,
-            "validation": Validation,
-            "variableParameter": VariableParameter,
+            "compliance": ProcessCompliance,
+            "complianceDeclarations": ProcessComplianceDeclarations,
+            "geography": ProcessGeography,
+            "modellingAndValidation": ProcessModellingAndValidation,
+            "name": ProcessName,
+            "publicationAndOwnership": ProcessPublicationAndOwnership,
+            "quantitativeReference": ProcessQuantitativeReference,
+            "technology": ProcessTechnology,
         }
         try:
             return lookupMap[name]
-        except KeyError as exc:
-            raise KeyError("Element {name} can't be found in {__class__}.") from exc
+        except KeyError:
+            return _check_common_lookup(name)
+
+
+class FlowDatasetLookup(etree.CustomElementClassLookup):
+    """Custom XML lookup class for ILCD FlowDataset files."""
+
+    def lookup(
+        self, unused_node_type, unused_document, unused_namespace, name: str
+    ) -> type:
+        """Maps ILCD ProcessDataset XML elements to custom FlowDataset classes."""
+        lookupMap: Dict[str, type] = {
+            "administrativeInformation": FlowAdministrativeInformation,
+            "classificationInformation": FlowCategoryInformation,
+            "compliance": FlowCompliance,
+            "complianceDeclarations": FlowComplianceDeclarations,
+            "dataEntryBy": FlowDataEntryBy,
+            "dataSetInformation": FlowDataSetInformation,
+            "geography": FlowGeography,
+            "modellingAndValidation": FlowModellingAndValidation,
+            "name": FlowName,
+            "publicationAndOwnership": FlowPublicationAndOwnership,
+            "quantitativeReference": FlowQuantitativeReference,
+            "technology": FlowTechnology,
+        }
+        try:
+            return lookupMap[name]
+        except KeyError:
+            return _check_common_lookup(name)
 
 
 def validate_file_process_dataset(
@@ -152,14 +217,36 @@ def validate_file_process_dataset(
     return validate_file(file, Defaults.SCHEMA_PROCESS_DATASET)
 
 
+def validate_file_flow_dataset(
+    file: Union[str, Path, StringIO]
+) -> Union[None, List[str]]:
+    """Validates an ILCD Flow Dataset XML file against schema.
+    Parameters:
+    file: the str|Path path to the ILCD Flow Dataset XML file or its StringIO
+    representation.
+    Returns ``None`` if valid or a list of error strings.
+    """
+    return validate_file(file, Defaults.SCHEMA_FLOW_DATASET)
+
+
 def parse_file_process_dataset(file: Union[str, Path, StringIO]) -> ProcessDataSet:
-    """Parses an ILCD ProcessDataset XML file to custom ILCD classes.
+    """Parses an ILCD Process Dataset XML file to custom ILCD classes.
     Parameters:
     file: the str|Path path to the ProcessDataset XML file or its StringIO
     representation.
     Returns a ProcessDataset class representing the root of the XML file.
     """
     return parse_file(file, Defaults.SCHEMA_PROCESS_DATASET, ProcessDatasetLookup())
+
+
+def parse_file_flow_dataset(file: Union[str, Path, StringIO]) -> FlowDataSet:
+    """Parses an ILCD Flow DataSet XML file to custom ILCD classes.
+    Parameters:
+    file: the str|Path path to the Flow DataSet XML file or its StringIO
+    representation.
+    Returns a FlowDataSet class representing the root of the XML file.
+    """
+    return parse_file(file, Defaults.SCHEMA_FLOW_DATASET, FlowDatasetLookup())
 
 
 def parse_directory_process_dataset(
@@ -181,6 +268,29 @@ def parse_directory_process_dataset(
         dir_path=dir_path,
         schema_path=Defaults.SCHEMA_PROCESS_DATASET,
         lookup=ProcessDatasetLookup(),
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def parse_directory_flow_dataset(
+    dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, FlowDataSet]]:
+    """Parses a directory of ILCD Flow Dataset XML files to a list of
+    custom ILCD classes.
+    Parameters:
+    dir_path: the directory path, should contain ILCD Flow Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding ILCD classes
+    representing the root of the XML file.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return parse_directory(
+        dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_FLOW_DATASET,
+        lookup=FlowDataSet(),
         valid_suffixes=valid_suffixes,
     )
 

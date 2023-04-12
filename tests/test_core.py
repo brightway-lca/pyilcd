@@ -6,22 +6,28 @@ from io import StringIO
 import pytest
 
 from pyilcd.core import (
-    ProcessDatasetLookup,
+    _check_common_lookup,
     parse_file_process_dataset,
     save_ilcd_file,
+    validate_file_flow_dataset,
     validate_file_process_dataset,
 )
 
 
-def test_parse_file_process_dataset_key_error() -> None:
+def test_check_common_lookup() -> None:
     """It validates file successfully."""
     with pytest.raises(KeyError):
-        ProcessDatasetLookup().lookup("", "", "", "undefined")
+        _check_common_lookup("undefined")
 
 
 def test_validate_file_process_dataset_success() -> None:
     """It validates file successfully."""
     assert validate_file_process_dataset("data/sample_process.xml") is None
+
+
+def test_validate_file_flow_dataset_success() -> None:
+    """It validates file successfully."""
+    assert validate_file_flow_dataset("data/sample_flow.xml") is None
 
 
 def test_validate_file_process_dataset_fail() -> None:
@@ -32,6 +38,18 @@ def test_validate_file_process_dataset_fail() -> None:
         "No matching global declaration available for the validation root."
     )
     errorActual = validate_file_process_dataset(xml)
+    assert errorActual is not None
+    assert str(errorActual[0]) == errorExpected
+
+
+def test_validate_file_flow_dataset_fail() -> None:
+    """It validates file successfully."""
+    xml = StringIO("<ilcd></ilcd>")
+    errorExpected = (
+        "<string>:1:0:ERROR:SCHEMASV:SCHEMAV_CVC_ELT_1: Element 'ilcd': "
+        "No matching global declaration available for the validation root."
+    )
+    errorActual = validate_file_flow_dataset(xml)
     assert errorActual is not None
     assert str(errorActual[0]) == errorExpected
 

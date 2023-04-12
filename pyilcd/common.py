@@ -350,3 +350,58 @@ class PublicationAndOwnershipGroup3(etree.ElementBase):
         confidentiality management in projects. [Note: See also
         field "Access and use restrictions".]"""
         return get_element_list(self, "common:referenceToEntitiesWithExclusiveAccess")
+
+
+class FlowCategoryInformation(etree.ElementBase):
+    """Hierachical classification of the Flow property foreseen to be used
+    to structure the Flow property content of the database. (Note: This entry
+    is NOT required for the identification of the Flow property data set. It
+    should nevertheless be avoided to use identical names for Flow properties
+    in the same class."""
+
+    @property
+    def elementaryFlowCategorization(self) -> List["FlowCategorization"]:
+        """Identifying category/compartment information exclusively used for
+        elementary flows. E.g. "Emission to air", "Renewable resource", etc."""
+        return get_element_list(self, "common:elementaryFlowCategorization")
+
+    @property
+    def classifications(self) -> List["Classification"]:
+        """Optional statistical or other classification of the data set.
+        Typically also used for structuring LCA databases."""
+        return get_element_list(self, "common:classification")
+
+
+class FlowCategorization(etree.ElementBase):
+    """Identifying category/compartment information exclusively used for
+    elementary flows. E.g. "Emission to air", "Renewable resource", etc."""
+
+    name = create_attribute_process_dataset("name", str)
+    """Name of the categorization system. E.g. "ILCD 1.1" or another
+    elementary flow categorization/compartment scheme applied, as
+    defined e.g. in other LCA database (systems)."""
+
+    categories = create_attribute_process_dataset("categories", str)
+    """URL or file name of a file containing all categories of this
+    categorization system. [Note: The file is to be in form of the
+    "ILCDCategories.xml" format. If a category file is specified, only
+    categories of the referenced categories file should be used.]"""
+
+    @property
+    def categoryList(self) -> List["Category"]:
+        """Name of the category of this elementary flow.."""
+        return get_element_list(self, "common:category")
+
+
+class Category(etree.ElementBase):
+    """Name of the category of this elementary flow."""
+
+    level = create_attribute_process_dataset("level", str)
+    """Hierarchy level (1,2,...), if the categorization system
+    is hierachical, otherwise emtpy or not used."""
+
+    catId = create_attribute_process_dataset("catId", str)
+    """Unique identifier of the category. [Note: May be used by LCA
+    software for it's category system. If used the identifer should
+    be identical to the on defined in the referenced category file.
+    Identifiers can be UUIDs, but also other forms are possible.]"""
