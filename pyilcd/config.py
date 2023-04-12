@@ -19,6 +19,9 @@ class Defaults:
     SCHEMA_FLOW_DATASET: ClassVar[str] = os.path.join(
         SCHEMA_DIR, "ILCD_FlowDataSet.xsd"
     )
+    SCHEMA_FLOW_PROPERTY_DATASET: ClassVar[str] = os.path.join(
+        SCHEMA_DIR, "ILCD_FlowPropertyDataSet.xsd"
+    )
 
     DYNAMIC_DEFAULTS: ClassVar[
         Dict[str, Dict[str, Callable[[etree.ElementBase], str]]]

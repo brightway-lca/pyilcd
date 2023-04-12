@@ -34,6 +34,26 @@ from .flow_dataset import Name as FlowName
 from .flow_dataset import PublicationAndOwnership as FlowPublicationAndOwnership
 from .flow_dataset import QuantitativeReference as FlowQuantitativeReference
 from .flow_dataset import Technology as FlowTechnology
+from .flow_property_dataset import (
+    AdministrativeInformation as FlowPropertyAdministrativeInformation,
+)
+from .flow_property_dataset import Compliance as FlowPropertyCompliance
+from .flow_property_dataset import (
+    ComplianceDeclarations as FlowPropertyComplianceDeclarations,
+)
+from .flow_property_dataset import DataEntryBy as FlowPropertyDataEntryBy
+from .flow_property_dataset import DataSetInformation as FlowPropertyDataSetInformation
+from .flow_property_dataset import DataSourcesTreatmentAndRepresentativeness as FPDSTAR
+from .flow_property_dataset import FlowPropertiesInformation, FlowPropertyDataSet
+from .flow_property_dataset import (
+    ModellingAndValidation as FlowPropertyModellingAndValidation,
+)
+from .flow_property_dataset import (
+    PublicationAndOwnership as FlowPropertyPublicationAndOwnership,
+)
+from .flow_property_dataset import (
+    QuantitativeReference as FlowPropertyQuantitativeReference,
+)
 from .process_dataset import (
     AdministrativeInformation as ProcessAdministrativeInformation,
 )
@@ -49,11 +69,8 @@ from .process_dataset import ComplianceDeclarations as ProcessComplianceDeclarat
 from .process_dataset import DataEntryBy as ProcessDataEntryBy
 from .process_dataset import DataGenerator
 from .process_dataset import DataSetInformation as ProcessDataSetInformation
-from .process_dataset import (
-    DataSourcesTreatmentAndRepresentativeness,
-    Exchange,
-    Exchanges,
-)
+from .process_dataset import DataSourcesTreatmentAndRepresentativeness as PDSTAR
+from .process_dataset import Exchange, Exchanges
 from .process_dataset import Geography as ProcessGeography
 from .process_dataset import (
     LCIAResult,
@@ -78,9 +95,6 @@ from .process_dataset import Time, Validation, VariableParameter
 COMMON_LOOK_UP: Dict[str, type] = {
     "allocation": Allocation,
     "allocations": Allocations,
-    "dataSourcesTreatmentAndRepresentativeness": (
-        DataSourcesTreatmentAndRepresentativeness
-    ),
     "category": Category,
     "class": Class,
     "classification": Classification,
@@ -95,7 +109,9 @@ COMMON_LOOK_UP: Dict[str, type] = {
     "flowDataSet": FlowDataSet,
     "flowInformation": FlowInformation,
     "flowProperties": FlowProperties,
+    "flowPropertiesInformation": FlowPropertiesInformation,
     "flowProperty": FlowProperty,
+    "flowPropertyDataSet": FlowPropertyDataSet,
     "method": Method,
     "scope": Scope,
     "exchange": Exchange,
@@ -129,6 +145,7 @@ COMMON_LOOK_UP: Dict[str, type] = {
     "referenceToPersonOrEntityEnteringTheData": GlobalReference,
     "referenceToPersonOrEntityGeneratingTheDataSet": GlobalReference,
     "referenceToPrecedingDataSetVersion": GlobalReference,
+    "referenceToReferenceUnitGroup": GlobalReference,
     "referenceToRegistrationAuthority": GlobalReference,
     "referenceToSupportedImpactAssessmentMethods": GlobalReference,
     "referenceToTechnicalSpecification": GlobalReference,
@@ -162,6 +179,7 @@ class ProcessDatasetLookup(etree.CustomElementClassLookup):
             "administrativeInformation": ProcessAdministrativeInformation,
             "dataEntryBy": ProcessDataEntryBy,
             "dataSetInformation": ProcessDataSetInformation,
+            "dataSourcesTreatmentAndRepresentativeness": PDSTAR,
             "classificationInformation": ClassificationInformation,
             "compliance": ProcessCompliance,
             "complianceDeclarations": ProcessComplianceDeclarations,
@@ -205,6 +223,31 @@ class FlowDatasetLookup(etree.CustomElementClassLookup):
             return _check_common_lookup(name)
 
 
+class FlowPropertyDatasetLookup(etree.CustomElementClassLookup):
+    """Custom XML lookup class for ILCD FlowPropertyDataset files."""
+
+    def lookup(
+        self, unused_node_type, unused_document, unused_namespace, name: str
+    ) -> type:
+        """Maps ILCD ProcessDataset XML elements to custom FlowDataset classes."""
+        lookupMap: Dict[str, type] = {
+            "administrativeInformation": FlowPropertyAdministrativeInformation,
+            "classificationInformation": ClassificationInformation,
+            "compliance": FlowPropertyCompliance,
+            "complianceDeclarations": FlowPropertyComplianceDeclarations,
+            "dataEntryBy": FlowPropertyDataEntryBy,
+            "dataSetInformation": FlowPropertyDataSetInformation,
+            "dataSourcesTreatmentAndRepresentativeness": FPDSTAR,
+            "modellingAndValidation": FlowPropertyModellingAndValidation,
+            "publicationAndOwnership": FlowPropertyPublicationAndOwnership,
+            "quantitativeReference": FlowPropertyQuantitativeReference,
+        }
+        try:
+            return lookupMap[name]
+        except KeyError:
+            return _check_common_lookup(name)
+
+
 def validate_file_process_dataset(
     file: Union[str, Path, StringIO]
 ) -> Union[None, List[str]]:
@@ -229,6 +272,18 @@ def validate_file_flow_dataset(
     return validate_file(file, Defaults.SCHEMA_FLOW_DATASET)
 
 
+def validate_file_flow_property_dataset(
+    file: Union[str, Path, StringIO]
+) -> Union[None, List[str]]:
+    """Validates an ILCD Flow Property Dataset XML file against schema.
+    Parameters:
+    file: the str|Path path to the ILCD Flow Property Dataset XML file or its StringIO
+    representation.
+    Returns ``None`` if valid or a list of error strings.
+    """
+    return validate_file(file, Defaults.SCHEMA_FLOW_PROPERTY_DATASET)
+
+
 def parse_file_process_dataset(file: Union[str, Path, StringIO]) -> ProcessDataSet:
     """Parses an ILCD Process Dataset XML file to custom ILCD classes.
     Parameters:
@@ -247,6 +302,20 @@ def parse_file_flow_dataset(file: Union[str, Path, StringIO]) -> FlowDataSet:
     Returns a FlowDataSet class representing the root of the XML file.
     """
     return parse_file(file, Defaults.SCHEMA_FLOW_DATASET, FlowDatasetLookup())
+
+
+def parse_file_flow_property_dataset(
+    file: Union[str, Path, StringIO]
+) -> FlowPropertyDataSet:
+    """Parses an ILCD Flow Property DataSet XML file to custom ILCD classes.
+    Parameters:
+    file: the str|Path path to the Flow Property DataSet XML file or its StringIO
+    representation.
+    Returns a FlowPropertyDataSet class representing the root of the XML file.
+    """
+    return parse_file(
+        file, Defaults.SCHEMA_FLOW_PROPERTY_DATASET, FlowPropertyDatasetLookup()
+    )
 
 
 def parse_directory_process_dataset(
@@ -291,6 +360,29 @@ def parse_directory_flow_dataset(
         dir_path=dir_path,
         schema_path=Defaults.SCHEMA_FLOW_DATASET,
         lookup=FlowDataSet(),
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def parse_directory_flow_property_dataset(
+    dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, FlowPropertyDataSet]]:
+    """Parses a directory of ILCD Flow Property Dataset XML files to a list of
+    custom ILCD classes.
+    Parameters:
+    dir_path: the directory path, should contain ILCD Flow Property Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding ILCD classes
+    representing the root of the XML file.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return parse_directory(
+        dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_FLOW_PROPERTY_DATASET,
+        lookup=FlowPropertyDataSet(),
         valid_suffixes=valid_suffixes,
     )
 

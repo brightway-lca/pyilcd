@@ -93,7 +93,7 @@
          <common:referenceToDataSetFormat type="source data set"
             uri="../sources/ILCD_Format_1_1_a97a0155-0234-4b87-b4ce-a45da52f2a40.xml"
             refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40">
-            <common:shortDescription>ILCD format 1.1</common:shortDescription>
+            <common:shortDescription xml:lang="en">ILCD format 1.1</common:shortDescription>
             <!--<common:other/>-->
          </common:referenceToDataSetFormat>
          <common:referenceToDataSetFormat type="source data set"

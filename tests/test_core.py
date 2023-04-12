@@ -2,6 +2,8 @@
 import os
 import tempfile
 from io import StringIO
+from pathlib import Path
+from typing import Callable, List, Union
 
 import pytest
 
@@ -10,6 +12,7 @@ from pyilcd.core import (
     parse_file_process_dataset,
     save_ilcd_file,
     validate_file_flow_dataset,
+    validate_file_flow_property_dataset,
     validate_file_process_dataset,
 )
 
@@ -30,28 +33,37 @@ def test_validate_file_flow_dataset_success() -> None:
     assert validate_file_flow_dataset("data/sample_flow.xml") is None
 
 
-def test_validate_file_process_dataset_fail() -> None:
+def test_validate_file_flow_property_dataset_success() -> None:
     """It validates file successfully."""
+    assert validate_file_flow_property_dataset("data/sample_flowproperty.xml") is None
+
+
+def _validate_file_fail(
+    validator: Callable[[Union[str, Path, StringIO]], Union[None, List[str]]]
+) -> None:
     xml = StringIO("<ilcd></ilcd>")
     errorExpected = (
         "<string>:1:0:ERROR:SCHEMASV:SCHEMAV_CVC_ELT_1: Element 'ilcd': "
         "No matching global declaration available for the validation root."
     )
-    errorActual = validate_file_process_dataset(xml)
+    errorActual = validator(xml)
     assert errorActual is not None
     assert str(errorActual[0]) == errorExpected
+
+
+def test_validate_file_process_dataset_fail() -> None:
+    """It validates file successfully."""
+    _validate_file_fail(validate_file_process_dataset)
 
 
 def test_validate_file_flow_dataset_fail() -> None:
     """It validates file successfully."""
-    xml = StringIO("<ilcd></ilcd>")
-    errorExpected = (
-        "<string>:1:0:ERROR:SCHEMASV:SCHEMAV_CVC_ELT_1: Element 'ilcd': "
-        "No matching global declaration available for the validation root."
-    )
-    errorActual = validate_file_flow_dataset(xml)
-    assert errorActual is not None
-    assert str(errorActual[0]) == errorExpected
+    _validate_file_fail(validate_file_flow_dataset)
+
+
+def test_validate_file_flow_property_dataset_fail() -> None:
+    """It validates file successfully."""
+    _validate_file_fail(validate_file_flow_property_dataset)
 
 
 def test_save_ilcd_file() -> None:
