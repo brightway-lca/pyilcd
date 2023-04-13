@@ -9,6 +9,7 @@ from pyilcd.common import (
 )
 from pyilcd.flow_dataset import FlowDataSet
 from pyilcd.process_dataset import ProcessDataSet
+from pyilcd.unit_group_dataset import UnitGroupDataSet
 
 
 def test_classification_information(process_dataset: ProcessDataSet) -> None:
@@ -34,9 +35,9 @@ def test_review(process_dataset: ProcessDataSet) -> None:
     assert isinstance(review.referenceToNameOfReviewerAndInstitution, GlobalReference)
 
 
-def test_compliance(process_dataset: ProcessDataSet) -> None:
+def test_compliance(unit_group_dataset: UnitGroupDataSet) -> None:
     """It parses attributes correctly."""
-    modellingAndValidation = process_dataset.modellingAndValidation
+    modellingAndValidation = unit_group_dataset.modellingAndValidation
     compliance = modellingAndValidation.complianceDeclarations.compliances[0]
 
     assert isinstance(compliance.referenceToComplianceSystem, GlobalReference)

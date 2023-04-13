@@ -12,6 +12,8 @@ from .common import (
     Classification,
     ClassificationInformation,
     CommissionerAndGoal,
+    Compliance,
+    ComplianceDeclarations,
     DataQualityIndicator,
     DataQualityIndicators,
     FlowCategorization,
@@ -29,8 +31,6 @@ from .contact_dataset import DataEntryBy as ContactDataEntryBy
 from .contact_dataset import DataSetInformation as ContactDataSetInformation
 from .contact_dataset import PublicationAndOwnership as ContactPublicationAndOwnership
 from .flow_dataset import AdministrativeInformation as FlowAdministrativeInformation
-from .flow_dataset import Compliance as FlowCompliance
-from .flow_dataset import ComplianceDeclarations as FlowComplianceDeclarations
 from .flow_dataset import DataEntryBy as FlowDataEntryBy
 from .flow_dataset import DataSetInformation as FlowDataSetInformation
 from .flow_dataset import FlowDataSet, FlowInformation, FlowProperties, FlowProperty
@@ -43,10 +43,6 @@ from .flow_dataset import QuantitativeReference as FlowQuantitativeReference
 from .flow_dataset import Technology as FlowTechnology
 from .flow_property_dataset import (
     AdministrativeInformation as FlowPropertyAdministrativeInformation,
-)
-from .flow_property_dataset import Compliance as FlowPropertyCompliance
-from .flow_property_dataset import (
-    ComplianceDeclarations as FlowPropertyComplianceDeclarations,
 )
 from .flow_property_dataset import DataEntryBy as FlowPropertyDataEntryBy
 from .flow_property_dataset import DataSetInformation as FlowPropertyDataSetInformation
@@ -98,12 +94,13 @@ from .process_dataset import (
 )
 from .process_dataset import Technology as ProcessTechnology
 from .process_dataset import Time, Validation, VariableParameter
+from .source_dataset import AdministrativeInformation as SourceAdministrativeInformation
+from .source_dataset import DataEntryBy as SourceDataEntryBy
+from .source_dataset import DataSetInformation as SourceDataSetInformation
+from .source_dataset import PublicationAndOwnership as SourcePublicationAndOwnership
+from .source_dataset import ReferenceToDigitalFile, SourceDataSet, SourceInformation
 from .unit_group_dataset import (
     AdministrativeInformation as UnitGroupAdministrativeInformation,
-)
-from .unit_group_dataset import Compliance as UnitGroupCompliance
-from .unit_group_dataset import (
-    ComplianceDeclarations as UnitGroupComplianceDeclarations,
 )
 from .unit_group_dataset import DataEntryBy as UnitGroupDataEntryBy
 from .unit_group_dataset import DataSetInformation as UnitGroupDataSetInformation
@@ -125,6 +122,8 @@ COMMON_LOOK_UP: Dict[str, type] = {
     "completeness": Completeness,
     "completenessElementaryFlows": CompletenessElementaryFlows,
     "complementingProcesses": ComplementingProcesses,
+    "compliance": Compliance,
+    "complianceDeclarations": ComplianceDeclarations,
     "commissionerAndGoal": CommissionerAndGoal,
     "contactDataSet": ContactDataSet,
     "contactInformation": ContactInformation,
@@ -160,6 +159,7 @@ COMMON_LOOK_UP: Dict[str, type] = {
     "referenceToDataSetFormat": GlobalReference,
     "referenceToDataSetUseApproval": GlobalReference,
     "referenceToDataSource": GlobalReference,
+    "referenceToDigitalFile": ReferenceToDigitalFile,
     "referenceToEntitiesWithExclusiveAccess": GlobalReference,
     "referenceToExternalDocumentation": GlobalReference,
     "referenceToFlowDataSet": GlobalReference,
@@ -182,6 +182,8 @@ COMMON_LOOK_UP: Dict[str, type] = {
     "referenceToUnchangedRepublication": GlobalReference,
     "referencesToDataSource": ReferencesToDataSource,
     "review": Review,
+    "sourceDataSet": SourceDataSet,
+    "sourceInformation": SourceInformation,
     "subLocationOfOperationSupplyOrProduction": (
         SubLocationOfOperationSupplyOrProduction
     ),
@@ -234,12 +236,10 @@ class FlowDatasetLookup(etree.CustomElementClassLookup):
     def lookup(
         self, unused_node_type, unused_document, unused_namespace, name: str
     ) -> type:
-        """Maps ILCD ProcessDataset XML elements to custom FlowDataset classes."""
+        """Maps ILCD FlowDataset XML elements to custom FlowDataset classes."""
         lookupMap: Dict[str, type] = {
             "administrativeInformation": FlowAdministrativeInformation,
             "classificationInformation": FlowCategoryInformation,
-            "compliance": FlowCompliance,
-            "complianceDeclarations": FlowComplianceDeclarations,
             "dataEntryBy": FlowDataEntryBy,
             "dataSetInformation": FlowDataSetInformation,
             "geography": FlowGeography,
@@ -261,13 +261,11 @@ class FlowPropertyDatasetLookup(etree.CustomElementClassLookup):
     def lookup(
         self, unused_node_type, unused_document, unused_namespace, name: str
     ) -> type:
-        """Maps ILCD ProcessDataset XML elements to custom FlowPropertyDataset
+        """Maps ILCD FlowPropertyDataset XML elements to custom FlowPropertyDataset
         classes."""
         lookupMap: Dict[str, type] = {
             "administrativeInformation": FlowPropertyAdministrativeInformation,
             "classificationInformation": ClassificationInformation,
-            "compliance": FlowPropertyCompliance,
-            "complianceDeclarations": FlowPropertyComplianceDeclarations,
             "dataEntryBy": FlowPropertyDataEntryBy,
             "dataSetInformation": FlowPropertyDataSetInformation,
             "dataSourcesTreatmentAndRepresentativeness": FPDSTAR,
@@ -287,12 +285,11 @@ class UnitGroupDatasetLookup(etree.CustomElementClassLookup):
     def lookup(
         self, unused_node_type, unused_document, unused_namespace, name: str
     ) -> type:
-        """Maps ILCD ProcessDataset XML elements to custom UnitGroupDataset classes."""
+        """Maps ILCD UnitGroupDataset XML elements to custom UnitGroupDataset
+        classes."""
         lookupMap: Dict[str, type] = {
             "administrativeInformation": UnitGroupAdministrativeInformation,
             "classificationInformation": ClassificationInformation,
-            "compliance": UnitGroupCompliance,
-            "complianceDeclarations": UnitGroupComplianceDeclarations,
             "dataEntryBy": UnitGroupDataEntryBy,
             "dataSetInformation": UnitGroupDataSetInformation,
             "modellingAndValidation": UnitGroupModellingAndValidation,
@@ -311,13 +308,33 @@ class ContactDatasetLookup(etree.CustomElementClassLookup):
     def lookup(
         self, unused_node_type, unused_document, unused_namespace, name: str
     ) -> type:
-        """Maps ILCD ProcessDataset XML elements to custom ContactDataset classes."""
+        """Maps ILCD ContactDataset XML elements to custom ContactDataset classes."""
         lookupMap: Dict[str, type] = {
             "administrativeInformation": ContactAdministrativeInformation,
             "dataEntryBy": ContactDataEntryBy,
             "dataSetInformation": ContactDataSetInformation,
             "classificationInformation": ClassificationInformation,
             "publicationAndOwnership": ContactPublicationAndOwnership,
+        }
+        try:
+            return lookupMap[name]
+        except KeyError:
+            return _check_common_lookup(name)
+
+
+class SourceDatasetLookup(etree.CustomElementClassLookup):
+    """Custom XML lookup class for ILCD SourceDataset files."""
+
+    def lookup(
+        self, unused_node_type, unused_document, unused_namespace, name: str
+    ) -> type:
+        """Maps ILCD SourceDataset XML elements to custom SourceDataset classes."""
+        lookupMap: Dict[str, type] = {
+            "administrativeInformation": SourceAdministrativeInformation,
+            "dataEntryBy": SourceDataEntryBy,
+            "dataSetInformation": SourceDataSetInformation,
+            "classificationInformation": ClassificationInformation,
+            "publicationAndOwnership": SourcePublicationAndOwnership,
         }
         try:
             return lookupMap[name]
@@ -385,6 +402,18 @@ def validate_file_contact_dataset(
     return validate_file(file, Defaults.SCHEMA_CONTACT_DATASET)
 
 
+def validate_file_source_dataset(
+    file: Union[str, Path, StringIO]
+) -> Union[None, List[str]]:
+    """Validates an ILCD Source Dataset XML file against schema.
+    Parameters:
+    file: the str|Path path to the ILCD Source Dataset XML file or its StringIO
+    representation.
+    Returns ``None`` if valid or a list of error strings.
+    """
+    return validate_file(file, Defaults.SCHEMA_SOURCE_DATASET)
+
+
 def parse_file_process_dataset(file: Union[str, Path, StringIO]) -> ProcessDataSet:
     """Parses an ILCD Process Dataset XML file to custom ILCD classes.
     Parameters:
@@ -441,6 +470,16 @@ def parse_file_contact_dataset(file: Union[str, Path, StringIO]) -> ContactDataS
     return parse_file(file, Defaults.SCHEMA_CONTACT_DATASET, ContactDatasetLookup())
 
 
+def parse_file_source_dataset(file: Union[str, Path, StringIO]) -> SourceDataSet:
+    """Parses an ILCD Source DataSet XML file to custom ILCD classes.
+    Parameters:
+    file: the str|Path path to the Source DataSet XML file or its StringIO
+    representation.
+    Returns a SourceDataSet class representing the root of the XML file.
+    """
+    return parse_file(file, Defaults.SCHEMA_SOURCE_DATASET, SourceDatasetLookup())
+
+
 def parse_directory_process_dataset(
     dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
 ) -> List[Tuple[Path, ProcessDataSet]]:
@@ -482,7 +521,7 @@ def parse_directory_flow_dataset(
     return parse_directory(
         dir_path=dir_path,
         schema_path=Defaults.SCHEMA_FLOW_DATASET,
-        lookup=FlowDataSet(),
+        lookup=FlowDatasetLookup(),
         valid_suffixes=valid_suffixes,
     )
 
@@ -505,7 +544,7 @@ def parse_directory_flow_property_dataset(
     return parse_directory(
         dir_path=dir_path,
         schema_path=Defaults.SCHEMA_FLOW_PROPERTY_DATASET,
-        lookup=FlowPropertyDataSet(),
+        lookup=FlowPropertyDatasetLookup(),
         valid_suffixes=valid_suffixes,
     )
 
@@ -552,6 +591,29 @@ def parse_directory_contact_dataset(
         dir_path=dir_path,
         schema_path=Defaults.SCHEMA_CONTACT_DATASET,
         lookup=ContactDatasetLookup(),
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def parse_directory_source_dataset(
+    dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, SourceDataSet]]:
+    """Parses a directory of ILCD Source Dataset XML files to a list of
+    custom ILCD classes.
+    Parameters:
+    dir_path: the directory path, should contain ILCD Source Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding ILCD classes
+    representing the root of the XML file.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return parse_directory(
+        dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_SOURCE_DATASET,
+        lookup=SourceDatasetLookup(),
         valid_suffixes=valid_suffixes,
     )
 

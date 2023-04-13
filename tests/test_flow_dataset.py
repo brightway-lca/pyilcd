@@ -1,7 +1,7 @@
 """Test cases for the __flow_dataset__ module."""
 from pyilcd.common import GlobalReference
 from pyilcd.flow_dataset import (
-    Compliance,
+    ComplianceDeclarations,
     DataEntryBy,
     FlowCategoryInformation,
     FlowDataSet,
@@ -35,7 +35,7 @@ def test_modelling_and_validation(flow_dataset: FlowDataSet) -> None:
 
     assert isinstance(modellingAndValidation.lciMethod, LCIMethod)
     assert isinstance(
-        modellingAndValidation.complianceDeclarations.compliances[0], Compliance
+        modellingAndValidation.complianceDeclarations, ComplianceDeclarations
     )
 
 

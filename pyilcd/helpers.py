@@ -50,6 +50,14 @@ def create_attribute_contact_dataset(
     return create_attribute(name, attr_type, Defaults.SCHEMA_CONTACT_DATASET, validator)
 
 
+def create_attribute_source_dataset(
+    name: str, attr_type: type, validator: Optional[Callable] = None
+) -> property:
+    """Helper wrapper method for creating setters and getters for an ilcd
+    Source Dataset attribute"""
+    return create_attribute(name, attr_type, Defaults.SCHEMA_SOURCE_DATASET, validator)
+
+
 def create_element_text_process_dataset(name: str, element_type: type) -> property:
     """Helper wrapper method for creating setters and getters for an ilcd
     Process Dataset element text"""
@@ -96,3 +104,9 @@ def create_attribute_list_contact_dataset(name: str, attr_type: type) -> propert
     """Helper wrapper method for creating setters and getters for an ilcd
     Contact Dataset element text list"""
     return create_attribute_list(name, attr_type, Defaults.SCHEMA_CONTACT_DATASET)
+
+
+def create_attribute_list_source_dataset(name: str, attr_type: type) -> property:
+    """Helper wrapper method for creating setters and getters for an ilcd
+    Source Dataset element text list"""
+    return create_attribute_list(name, attr_type, Defaults.SCHEMA_SOURCE_DATASET)

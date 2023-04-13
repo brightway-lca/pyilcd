@@ -6,7 +6,7 @@ from lxmlh import get_element, get_element_list
 
 from .common import (
     ClassificationInformation,
-    ComplianceGroup,
+    ComplianceDeclarations,
     DataEntryByGroup1,
     GlobalReference,
     PublicationAndOwnershipGroup1,
@@ -155,18 +155,6 @@ class DataSourcesTreatmentAndRepresentativeness(etree.ElementBase):
         return get_element_list(self, "referenceToDataSource")
 
 
-class ComplianceDeclarations(etree.ElementBase):
-    """Statements on compliance of several data set aspects with
-    compliance requirements as defined by the referenced compliance
-    system (e.g. an EPD scheme, handbook of a national or
-    international data network such as the ILCD, etc.)."""
-
-    @property
-    def compliances(self) -> List["Compliance"]:
-        """One compliance declaration"""
-        return get_element_list(self, "compliance")
-
-
 class DataEntryBy(DataEntryByGroup1):
     """Staff or entity, that documented the generated data set,
     entering the information into the database; plus administrative
@@ -183,7 +171,3 @@ class PublicationAndOwnership(PublicationAndOwnershipGroup1):
         ata set. (Note: this is not necessarily the publisher of the
         ata set.)"""
         return get_element(self, "common:referenceToOwnershipOfDataSet")
-
-
-class Compliance(ComplianceGroup):
-    """One compliance declaration"""

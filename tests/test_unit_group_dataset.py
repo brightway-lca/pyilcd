@@ -1,7 +1,6 @@
 """Test cases for the __unit_group_dataset__ module."""
 from pyilcd.common import ClassificationInformation, GlobalReference
 from pyilcd.unit_group_dataset import (
-    Compliance,
     DataEntryBy,
     QuantitativeReference,
     Unit,
@@ -19,15 +18,6 @@ def test_unit_group_information(unit_group_dataset: UnitGroupDataSet) -> None:
         dataSetInformation.classificationInformation, ClassificationInformation
     )
     assert isinstance(quantitativeReference, QuantitativeReference)
-
-
-def test_modelling_and_validation(unit_group_dataset: UnitGroupDataSet) -> None:
-    """It parses attributes correctly."""
-    modellingAndValidation = unit_group_dataset.modellingAndValidation
-
-    assert isinstance(
-        modellingAndValidation.complianceDeclarations.compliances[0], Compliance
-    )
 
 
 def test_administrative_information(unit_group_dataset: UnitGroupDataSet) -> None:

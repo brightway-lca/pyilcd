@@ -1,6 +1,10 @@
 """Test cases for the __flow_property_dataset__ module."""
 from pyilcd.common import ClassificationInformation, GlobalReference
-from pyilcd.flow_property_dataset import Compliance, DataEntryBy, FlowPropertyDataSet
+from pyilcd.flow_property_dataset import (
+    ComplianceDeclarations,
+    DataEntryBy,
+    FlowPropertyDataSet,
+)
 
 
 def test_flow_properties_information(
@@ -25,13 +29,14 @@ def test_modelling_and_validation(flow_property_dataset: FlowPropertyDataSet) ->
     dataSourcesTreatmentAndRepresentativeness = (
         modellingAndValidation.dataSourcesTreatmentAndRepresentativeness
     )
-    complianceDeclarations = modellingAndValidation.complianceDeclarations
 
+    assert isinstance(
+        modellingAndValidation.complianceDeclarations, ComplianceDeclarations
+    )
     assert isinstance(
         dataSourcesTreatmentAndRepresentativeness.referenceToDataSources[0],
         GlobalReference,
     )
-    assert isinstance(complianceDeclarations.compliances[0], Compliance)
 
 
 def test_administrative_information(flow_property_dataset: FlowPropertyDataSet) -> None:

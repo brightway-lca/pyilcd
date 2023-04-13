@@ -6,7 +6,7 @@ from lxmlh import get_element, get_element_list
 from pycasreg.validation import validate_cas
 
 from .common import (
-    ComplianceGroup,
+    ComplianceDeclarations,
     DataEntryByGroup1,
     DataEntryByGroup2,
     FlowCategoryInformation,
@@ -237,22 +237,6 @@ class LCIMethod(etree.ElementBase):
 
     typeOfDataSet = create_element_text_flow_dataset("typeOfDataSet", str)
     """Names the basic type of the flow."""
-
-
-class ComplianceDeclarations(etree.ElementBase):
-    """Statements on compliance of several data set aspects with compliance
-    requirements as defined by the referenced compliance system (e.g. an
-    EPD scheme, handbook of a national or international data network such
-    as the ILCD, etc.)."""
-
-    @property
-    def compliances(self) -> List["Compliance"]:
-        """One compliance declaration"""
-        return get_element_list(self, "compliance")
-
-
-class Compliance(ComplianceGroup):
-    """One compliance declaration"""
 
 
 class DataEntryBy(DataEntryByGroup1, DataEntryByGroup2):

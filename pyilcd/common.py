@@ -405,3 +405,19 @@ class Category(etree.ElementBase):
     software for it's category system. If used the identifer should
     be identical to the on defined in the referenced category file.
     Identifiers can be UUIDs, but also other forms are possible.]"""
+
+
+class ComplianceDeclarations(etree.ElementBase):
+    """Statements on compliance of several data set aspects with compliance
+    requirements as defined by the referenced compliance system (e.g. an
+    EPD scheme, handbook of a national or international data network such
+    as the ILCD, etc.)."""
+
+    @property
+    def compliances(self) -> List["Compliance"]:
+        """One compliance declaration"""
+        return get_element_list(self, "compliance")
+
+
+class Compliance(ComplianceGroup):
+    """One compliance declaration"""

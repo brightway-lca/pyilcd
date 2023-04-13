@@ -3,18 +3,26 @@ import os
 import tempfile
 from io import StringIO
 from pathlib import Path
-from typing import Callable, List, Union
+from typing import Callable, List, Tuple, Union
 
 import pytest
+from lxml import etree
 
 from pyilcd.core import (
     _check_common_lookup,
+    parse_directory_contact_dataset,
+    parse_directory_flow_dataset,
+    parse_directory_flow_property_dataset,
+    parse_directory_process_dataset,
+    parse_directory_source_dataset,
+    parse_directory_unit_group_dataset,
     parse_file_process_dataset,
     save_ilcd_file,
     validate_file_contact_dataset,
     validate_file_flow_dataset,
     validate_file_flow_property_dataset,
     validate_file_process_dataset,
+    validate_file_source_dataset,
     validate_file_unit_group_dataset,
 )
 
@@ -27,27 +35,40 @@ def test_check_common_lookup() -> None:
 
 def test_validate_file_process_dataset_success() -> None:
     """It validates file successfully."""
-    assert validate_file_process_dataset("data/sample_process.xml") is None
+    assert validate_file_process_dataset("data/process/sample_process.xml") is None
 
 
 def test_validate_file_flow_dataset_success() -> None:
     """It validates file successfully."""
-    assert validate_file_flow_dataset("data/sample_flow.xml") is None
+    assert validate_file_flow_dataset("data/flow/sample_flow.xml") is None
 
 
 def test_validate_file_flow_property_dataset_success() -> None:
     """It validates file successfully."""
-    assert validate_file_flow_property_dataset("data/sample_flowproperty.xml") is None
+    assert (
+        validate_file_flow_property_dataset(
+            "data/flow_property/sample_flow_property.xml"
+        )
+        is None
+    )
 
 
 def test_validate_file_unit_group_dataset_success() -> None:
     """It validates file successfully."""
-    assert validate_file_unit_group_dataset("data/sample_unitgroup.xml") is None
+    assert (
+        validate_file_unit_group_dataset("data/unit_group/sample_unit_group.xml")
+        is None
+    )
 
 
 def test_validate_file_contact_dataset_success() -> None:
     """It validates file successfully."""
-    assert validate_file_contact_dataset("data/sample_contact.xml") is None
+    assert validate_file_contact_dataset("data/contact/sample_contact.xml") is None
+
+
+def test_validate_file_source_dataset_success() -> None:
+    """It validates file successfully."""
+    assert validate_file_source_dataset("data/source/sample_source.xml") is None
 
 
 def _validate_file_fail(
@@ -88,9 +109,14 @@ def test_validate_file_contact_dataset_fail() -> None:
     _validate_file_fail(validate_file_contact_dataset)
 
 
+def test_validate_file_source_dataset_fail() -> None:
+    """It validates file successfully."""
+    _validate_file_fail(validate_file_source_dataset)
+
+
 def test_save_ilcd_file() -> None:
     """It saves read file correctly."""
-    inputPath = "data/sample_process.xml"
+    inputPath = "data/process/sample_process.xml"
     processDataset = parse_file_process_dataset(inputPath)
     outputPath = os.path.join(tempfile.gettempdir(), os.urandom(24).hex())
     save_ilcd_file(processDataset, outputPath, fill_defaults=False)
@@ -105,8 +131,8 @@ def test_save_ilcd_file() -> None:
 
 def test_save_file_defaults() -> None:
     """It saves read file correctly."""
-    inputPath = "data/sample_process.xml"
-    expectedOutputPath = "data/sample_process.xml"
+    inputPath = "data/process/sample_process.xml"
+    expectedOutputPath = "data/process/sample_process.xml"
     processDataset = parse_file_process_dataset(inputPath)
     outputPath = os.path.join(tempfile.gettempdir(), os.urandom(24).hex())
     save_ilcd_file(processDataset, outputPath, fill_defaults=True)
@@ -117,3 +143,48 @@ def test_save_file_defaults() -> None:
             translatedOutput = outputFile.read().translate(mapping)
             translatedInput = inputFile.read().translate(mapping)
             assert translatedOutput == translatedInput
+
+
+def _parse_directory(
+    dataset_name: str,
+    parser: Callable[
+        [Union[str, Path], Union[List[str], None]], List[Tuple[Path, etree.ElementBase]]
+    ],
+) -> None:
+    """It reads all files successfully."""
+    dirPath = os.path.join(Path(__file__).parent.parent.resolve(), "data", dataset_name)
+    files = [os.path.join(dirPath, f"sample_{dataset_name}.xml")]
+    result = parser(dirPath)
+
+    assert len(result) == len(files)
+    assert result[0][0] == Path(files[0])
+
+
+def test_parse_directory_process_dataset() -> None:
+    "It parses directory successfully."
+    _parse_directory("process", parse_directory_process_dataset)
+
+
+def test_parse_directory_flow_dataset() -> None:
+    "It parses directory successfully."
+    _parse_directory("flow", parse_directory_flow_dataset)
+
+
+def test_parse_directory_flow_property_dataset() -> None:
+    "It parses directory successfully."
+    _parse_directory("flow_property", parse_directory_flow_property_dataset)
+
+
+def test_parse_directory_unit_group_dataset() -> None:
+    "It parses directory successfully."
+    _parse_directory("unit_group", parse_directory_unit_group_dataset)
+
+
+def test_parse_directory_contact_dataset() -> None:
+    "It parses directory successfully."
+    _parse_directory("contact", parse_directory_contact_dataset)
+
+
+def test_parse_directory_source_dataset() -> None:
+    "It parses directory successfully."
+    _parse_directory("source", parse_directory_source_dataset)
