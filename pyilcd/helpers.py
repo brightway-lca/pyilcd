@@ -42,6 +42,14 @@ def create_attribute_unit_group_dataset(
     )
 
 
+def create_attribute_contact_dataset(
+    name: str, attr_type: type, validator: Optional[Callable] = None
+) -> property:
+    """Helper wrapper method for creating setters and getters for an ilcd
+    Contact Dataset attribute"""
+    return create_attribute(name, attr_type, Defaults.SCHEMA_CONTACT_DATASET, validator)
+
+
 def create_element_text_process_dataset(name: str, element_type: type) -> property:
     """Helper wrapper method for creating setters and getters for an ilcd
     Process Dataset element text"""
@@ -82,3 +90,9 @@ def create_attribute_list_unit_group_dataset(name: str, attr_type: type) -> prop
     """Helper wrapper method for creating setters and getters for an ilcd
     Unit Group Dataset element text list"""
     return create_attribute_list(name, attr_type, Defaults.SCHEMA_UNIT_GROUP_DATASET)
+
+
+def create_attribute_list_contact_dataset(name: str, attr_type: type) -> property:
+    """Helper wrapper method for creating setters and getters for an ilcd
+    Contact Dataset element text list"""
+    return create_attribute_list(name, attr_type, Defaults.SCHEMA_CONTACT_DATASET)

@@ -1,7 +1,9 @@
 """Fixtures for pyilcd"""
 import pytest
 
+from pyilcd.contact_dataset import ContactDataSet
 from pyilcd.core import (
+    parse_file_contact_dataset,
     parse_file_flow_dataset,
     parse_file_flow_property_dataset,
     parse_file_process_dataset,
@@ -31,3 +33,8 @@ def _flow_property_dataset() -> FlowPropertyDataSet:
 @pytest.fixture(name="unit_group_dataset")
 def _unit_group_dataset() -> UnitGroupDataSet:
     return parse_file_unit_group_dataset("data/sample_unitgroup.xml")
+
+
+@pytest.fixture(name="contact_dataset")
+def _contact_dataset() -> ContactDataSet:
+    return parse_file_contact_dataset("data/sample_contact.xml")

@@ -21,6 +21,13 @@ from .common import (
     Scope,
 )
 from .config import Defaults
+from .contact_dataset import (
+    AdministrativeInformation as ContactAdministrativeInformation,
+)
+from .contact_dataset import ContactDataSet, ContactInformation
+from .contact_dataset import DataEntryBy as ContactDataEntryBy
+from .contact_dataset import DataSetInformation as ContactDataSetInformation
+from .contact_dataset import PublicationAndOwnership as ContactPublicationAndOwnership
 from .flow_dataset import AdministrativeInformation as FlowAdministrativeInformation
 from .flow_dataset import Compliance as FlowCompliance
 from .flow_dataset import ComplianceDeclarations as FlowComplianceDeclarations
@@ -119,6 +126,8 @@ COMMON_LOOK_UP: Dict[str, type] = {
     "completenessElementaryFlows": CompletenessElementaryFlows,
     "complementingProcesses": ComplementingProcesses,
     "commissionerAndGoal": CommissionerAndGoal,
+    "contactDataSet": ContactDataSet,
+    "contactInformation": ContactInformation,
     "dataGenerator": DataGenerator,
     "dataQualityIndicator": DataQualityIndicator,
     "dataQualityIndicators": DataQualityIndicators,
@@ -141,6 +150,7 @@ COMMON_LOOK_UP: Dict[str, type] = {
     "mathematicalRelations": MathematicalRelations,
     "processDataSet": ProcessDataSet,
     "processInformation": ProcessInformation,
+    "referenceToContact": GlobalReference,
     "referenceToCommissioner": GlobalReference,
     "referenceToComplementingProcess": GlobalReference,
     "referenceToCompleteReviewReport": GlobalReference,
@@ -157,6 +167,7 @@ COMMON_LOOK_UP: Dict[str, type] = {
     "referenceToIncludedProcesses": GlobalReference,
     "referenceToLCAMethodDetails": GlobalReference,
     "referenceToLCIAMethodDataSet": GlobalReference,
+    "referenceToLogo": GlobalReference,
     "referenceToNameOfReviewerAndInstitution": GlobalReference,
     "referenceToOwnershipOfDataSet": GlobalReference,
     "referenceToPersonOrEntityEnteringTheData": GlobalReference,
@@ -294,6 +305,26 @@ class UnitGroupDatasetLookup(etree.CustomElementClassLookup):
             return _check_common_lookup(name)
 
 
+class ContactDatasetLookup(etree.CustomElementClassLookup):
+    """Custom XML lookup class for ILCD ContactDataset files."""
+
+    def lookup(
+        self, unused_node_type, unused_document, unused_namespace, name: str
+    ) -> type:
+        """Maps ILCD ProcessDataset XML elements to custom ContactDataset classes."""
+        lookupMap: Dict[str, type] = {
+            "administrativeInformation": ContactAdministrativeInformation,
+            "dataEntryBy": ContactDataEntryBy,
+            "dataSetInformation": ContactDataSetInformation,
+            "classificationInformation": ClassificationInformation,
+            "publicationAndOwnership": ContactPublicationAndOwnership,
+        }
+        try:
+            return lookupMap[name]
+        except KeyError:
+            return _check_common_lookup(name)
+
+
 def validate_file_process_dataset(
     file: Union[str, Path, StringIO]
 ) -> Union[None, List[str]]:
@@ -342,6 +373,18 @@ def validate_file_unit_group_dataset(
     return validate_file(file, Defaults.SCHEMA_UNIT_GROUP_DATASET)
 
 
+def validate_file_contact_dataset(
+    file: Union[str, Path, StringIO]
+) -> Union[None, List[str]]:
+    """Validates an ILCD Contact Dataset XML file against schema.
+    Parameters:
+    file: the str|Path path to the ILCD Contact Dataset XML file or its StringIO
+    representation.
+    Returns ``None`` if valid or a list of error strings.
+    """
+    return validate_file(file, Defaults.SCHEMA_CONTACT_DATASET)
+
+
 def parse_file_process_dataset(file: Union[str, Path, StringIO]) -> ProcessDataSet:
     """Parses an ILCD Process Dataset XML file to custom ILCD classes.
     Parameters:
@@ -381,11 +424,21 @@ def parse_file_unit_group_dataset(file: Union[str, Path, StringIO]) -> UnitGroup
     Parameters:
     file: the str|Path path to the Unit Group DataSet XML file or its StringIO
     representation.
-    Returns a FlowPropertyDataSet class representing the root of the XML file.
+    Returns a UnitGroupDataSet class representing the root of the XML file.
     """
     return parse_file(
         file, Defaults.SCHEMA_UNIT_GROUP_DATASET, UnitGroupDatasetLookup()
     )
+
+
+def parse_file_contact_dataset(file: Union[str, Path, StringIO]) -> ContactDataSet:
+    """Parses an ILCD Contact DataSet XML file to custom ILCD classes.
+    Parameters:
+    file: the str|Path path to the Contact DataSet XML file or its StringIO
+    representation.
+    Returns a ContactDataSet class representing the root of the XML file.
+    """
+    return parse_file(file, Defaults.SCHEMA_CONTACT_DATASET, ContactDatasetLookup())
 
 
 def parse_directory_process_dataset(
@@ -476,6 +529,29 @@ def parse_directory_unit_group_dataset(
         dir_path=dir_path,
         schema_path=Defaults.SCHEMA_UNIT_GROUP_DATASET,
         lookup=UnitGroupDatasetLookup(),
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def parse_directory_contact_dataset(
+    dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, ContactDataSet]]:
+    """Parses a directory of ILCD Contact Dataset XML files to a list of
+    custom ILCD classes.
+    Parameters:
+    dir_path: the directory path, should contain ILCD Contact Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding ILCD classes
+    representing the root of the XML file.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return parse_directory(
+        dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_CONTACT_DATASET,
+        lookup=ContactDatasetLookup(),
         valid_suffixes=valid_suffixes,
     )
 

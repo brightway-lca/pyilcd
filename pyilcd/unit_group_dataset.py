@@ -120,7 +120,9 @@ class DataSetInformation(etree.ElementBase):
     set."""
 
     names = create_attribute_list_unit_group_dataset("common:name", str)
-    """Name of flow property."""
+    """Name of the unit group, typically indicating for which flow property or group
+    of flow properties it is used. The individual units are named in the "Units"
+    section of the "Unit group data set"."""
 
     synonyms = create_attribute_list_unit_group_dataset("common:synonyms", str)
     """Synonyms / alternative names / brands of the good, service, or
