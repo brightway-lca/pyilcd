@@ -5,10 +5,12 @@ from pyilcd.core import (
     parse_file_flow_dataset,
     parse_file_flow_property_dataset,
     parse_file_process_dataset,
+    parse_file_unit_group_dataset,
 )
 from pyilcd.flow_dataset import FlowDataSet
 from pyilcd.flow_property_dataset import FlowPropertyDataSet
 from pyilcd.process_dataset import ProcessDataSet
+from pyilcd.unit_group_dataset import UnitGroupDataSet
 
 
 @pytest.fixture(name="process_dataset")
@@ -24,3 +26,8 @@ def _flow_dataset() -> FlowDataSet:
 @pytest.fixture(name="flow_property_dataset")
 def _flow_property_dataset() -> FlowPropertyDataSet:
     return parse_file_flow_property_dataset("data/sample_flowproperty.xml")
+
+
+@pytest.fixture(name="unit_group_dataset")
+def _unit_group_dataset() -> UnitGroupDataSet:
+    return parse_file_unit_group_dataset("data/sample_unitgroup.xml")

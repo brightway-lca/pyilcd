@@ -32,6 +32,16 @@ def create_attribute_flow_property_dataset(
     )
 
 
+def create_attribute_unit_group_dataset(
+    name: str, attr_type: type, validator: Optional[Callable] = None
+) -> property:
+    """Helper wrapper method for creating setters and getters for an ilcd
+    Unit Group Dataset attribute"""
+    return create_attribute(
+        name, attr_type, Defaults.SCHEMA_UNIT_GROUP_DATASET, validator
+    )
+
+
 def create_element_text_process_dataset(name: str, element_type: type) -> property:
     """Helper wrapper method for creating setters and getters for an ilcd
     Process Dataset element text"""
@@ -42,6 +52,12 @@ def create_element_text_flow_dataset(name: str, element_type: type) -> property:
     """Helper wrapper method for creating setters and getters for an ilcd
     Flow Dataset element text"""
     return create_element_text(name, element_type, Defaults.SCHEMA_FLOW_DATASET)
+
+
+def create_element_text_unit_group_dataset(name: str, element_type: type) -> property:
+    """Helper wrapper method for creating setters and getters for an ilcd
+    Unit Group element text"""
+    return create_element_text(name, element_type, Defaults.SCHEMA_UNIT_GROUP_DATASET)
 
 
 def create_attribute_list_process_dataset(name: str, attr_type: type) -> property:
@@ -60,3 +76,9 @@ def create_attribute_list_flow_property_dataset(name: str, attr_type: type) -> p
     """Helper wrapper method for creating setters and getters for an ilcd
     Flow Property Dataset element text list"""
     return create_attribute_list(name, attr_type, Defaults.SCHEMA_FLOW_PROPERTY_DATASET)
+
+
+def create_attribute_list_unit_group_dataset(name: str, attr_type: type) -> property:
+    """Helper wrapper method for creating setters and getters for an ilcd
+    Unit Group Dataset element text list"""
+    return create_attribute_list(name, attr_type, Defaults.SCHEMA_UNIT_GROUP_DATASET)

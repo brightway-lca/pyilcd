@@ -14,6 +14,7 @@ from pyilcd.core import (
     validate_file_flow_dataset,
     validate_file_flow_property_dataset,
     validate_file_process_dataset,
+    validate_file_unit_group_dataset,
 )
 
 
@@ -36,6 +37,11 @@ def test_validate_file_flow_dataset_success() -> None:
 def test_validate_file_flow_property_dataset_success() -> None:
     """It validates file successfully."""
     assert validate_file_flow_property_dataset("data/sample_flowproperty.xml") is None
+
+
+def test_validate_file_unit_group_dataset_success() -> None:
+    """It validates file successfully."""
+    assert validate_file_unit_group_dataset("data/sample_unitgroup.xml") is None
 
 
 def _validate_file_fail(
@@ -64,6 +70,11 @@ def test_validate_file_flow_dataset_fail() -> None:
 def test_validate_file_flow_property_dataset_fail() -> None:
     """It validates file successfully."""
     _validate_file_fail(validate_file_flow_property_dataset)
+
+
+def test_validate_file_unit_group_dataset_fail() -> None:
+    """It validates file successfully."""
+    _validate_file_fail(validate_file_unit_group_dataset)
 
 
 def test_save_ilcd_file() -> None:

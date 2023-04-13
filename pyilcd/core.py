@@ -91,6 +91,23 @@ from .process_dataset import (
 )
 from .process_dataset import Technology as ProcessTechnology
 from .process_dataset import Time, Validation, VariableParameter
+from .unit_group_dataset import (
+    AdministrativeInformation as UnitGroupAdministrativeInformation,
+)
+from .unit_group_dataset import Compliance as UnitGroupCompliance
+from .unit_group_dataset import (
+    ComplianceDeclarations as UnitGroupComplianceDeclarations,
+)
+from .unit_group_dataset import DataEntryBy as UnitGroupDataEntryBy
+from .unit_group_dataset import DataSetInformation as UnitGroupDataSetInformation
+from .unit_group_dataset import (
+    ModellingAndValidation as UnitGroupModellingAndValidation,
+)
+from .unit_group_dataset import (
+    PublicationAndOwnership as UnitGroupPublicationAndOwnership,
+)
+from .unit_group_dataset import QuantitativeReference as UnitGroupQuantitativeReference
+from .unit_group_dataset import Unit, UnitGroupDataSet, UnitGroupInformation, Units
 
 COMMON_LOOK_UP: Dict[str, type] = {
     "allocation": Allocation,
@@ -158,6 +175,10 @@ COMMON_LOOK_UP: Dict[str, type] = {
         SubLocationOfOperationSupplyOrProduction
     ),
     "time": Time,
+    "unit": Unit,
+    "units": Units,
+    "unitGroupDataSet": UnitGroupDataSet,
+    "unitGroupInformation": UnitGroupInformation,
     "validation": Validation,
     "variableParameter": VariableParameter,
 }
@@ -229,7 +250,8 @@ class FlowPropertyDatasetLookup(etree.CustomElementClassLookup):
     def lookup(
         self, unused_node_type, unused_document, unused_namespace, name: str
     ) -> type:
-        """Maps ILCD ProcessDataset XML elements to custom FlowDataset classes."""
+        """Maps ILCD ProcessDataset XML elements to custom FlowPropertyDataset
+        classes."""
         lookupMap: Dict[str, type] = {
             "administrativeInformation": FlowPropertyAdministrativeInformation,
             "classificationInformation": ClassificationInformation,
@@ -241,6 +263,30 @@ class FlowPropertyDatasetLookup(etree.CustomElementClassLookup):
             "modellingAndValidation": FlowPropertyModellingAndValidation,
             "publicationAndOwnership": FlowPropertyPublicationAndOwnership,
             "quantitativeReference": FlowPropertyQuantitativeReference,
+        }
+        try:
+            return lookupMap[name]
+        except KeyError:
+            return _check_common_lookup(name)
+
+
+class UnitGroupDatasetLookup(etree.CustomElementClassLookup):
+    """Custom XML lookup class for ILCD UnitGroupDataset files."""
+
+    def lookup(
+        self, unused_node_type, unused_document, unused_namespace, name: str
+    ) -> type:
+        """Maps ILCD ProcessDataset XML elements to custom UnitGroupDataset classes."""
+        lookupMap: Dict[str, type] = {
+            "administrativeInformation": UnitGroupAdministrativeInformation,
+            "classificationInformation": ClassificationInformation,
+            "compliance": UnitGroupCompliance,
+            "complianceDeclarations": UnitGroupComplianceDeclarations,
+            "dataEntryBy": UnitGroupDataEntryBy,
+            "dataSetInformation": UnitGroupDataSetInformation,
+            "modellingAndValidation": UnitGroupModellingAndValidation,
+            "publicationAndOwnership": UnitGroupPublicationAndOwnership,
+            "quantitativeReference": UnitGroupQuantitativeReference,
         }
         try:
             return lookupMap[name]
@@ -284,6 +330,18 @@ def validate_file_flow_property_dataset(
     return validate_file(file, Defaults.SCHEMA_FLOW_PROPERTY_DATASET)
 
 
+def validate_file_unit_group_dataset(
+    file: Union[str, Path, StringIO]
+) -> Union[None, List[str]]:
+    """Validates an ILCD Unit Group Dataset XML file against schema.
+    Parameters:
+    file: the str|Path path to the ILCD Unit Group Dataset XML file or its StringIO
+    representation.
+    Returns ``None`` if valid or a list of error strings.
+    """
+    return validate_file(file, Defaults.SCHEMA_UNIT_GROUP_DATASET)
+
+
 def parse_file_process_dataset(file: Union[str, Path, StringIO]) -> ProcessDataSet:
     """Parses an ILCD Process Dataset XML file to custom ILCD classes.
     Parameters:
@@ -315,6 +373,18 @@ def parse_file_flow_property_dataset(
     """
     return parse_file(
         file, Defaults.SCHEMA_FLOW_PROPERTY_DATASET, FlowPropertyDatasetLookup()
+    )
+
+
+def parse_file_unit_group_dataset(file: Union[str, Path, StringIO]) -> UnitGroupDataSet:
+    """Parses an ILCD Unit Group DataSet XML file to custom ILCD classes.
+    Parameters:
+    file: the str|Path path to the Unit Group DataSet XML file or its StringIO
+    representation.
+    Returns a FlowPropertyDataSet class representing the root of the XML file.
+    """
+    return parse_file(
+        file, Defaults.SCHEMA_UNIT_GROUP_DATASET, UnitGroupDatasetLookup()
     )
 
 
@@ -383,6 +453,29 @@ def parse_directory_flow_property_dataset(
         dir_path=dir_path,
         schema_path=Defaults.SCHEMA_FLOW_PROPERTY_DATASET,
         lookup=FlowPropertyDataSet(),
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def parse_directory_unit_group_dataset(
+    dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, UnitGroupDataSet]]:
+    """Parses a directory of ILCD Unit Group Dataset XML files to a list of
+    custom ILCD classes.
+    Parameters:
+    dir_path: the directory path, should contain ILCD Unit Group Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding ILCD classes
+    representing the root of the XML file.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return parse_directory(
+        dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_UNIT_GROUP_DATASET,
+        lookup=UnitGroupDatasetLookup(),
         valid_suffixes=valid_suffixes,
     )
 
