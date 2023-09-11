@@ -1,4 +1,5 @@
 """pyilcd."""
+from .config import Defaults
 from .core import (
     parse_directory_contact_dataset,
     parse_directory_flow_dataset,
@@ -24,6 +25,7 @@ from .utils import get_version_tuple
 
 __all__ = (
     "__version__",
+    "Defaults",
     "parse_directory_contact_dataset",
     "parse_directory_flow_dataset",
     "parse_directory_flow_property_dataset",
