@@ -36,7 +36,7 @@ from pyilcd import parse_file_contact_dataset, validate_file_contact_dataset, sa
 Defaults.config_defaults("config.ini")  # Replace with your own config file
 
 # Validate the ContactDataset class against the ContactDataset schema.
-print(validate_file_contact_dataset("data/invalid/sample_contact_invalid.xml"))  # Replace with your own XML file
+validate_file_contact_dataset("data/invalid/sample_contact_invalid.xml")  # Replace with your own XML file
 >> data/contact/sample_contact_invalid.xml:17:0:ERROR:SCHEMASV:SCHEMAV_CVC_DATATYPE_VALID_1_2_1: Element '{http://lca.jrc.it/ILCD/Common}class', attribute 'level': 'a' is not a valid value of the atomic type '{http://lca.jrc.it/ILCD/Common}LevelType'. data/contact/sample_contact_invalid.xml:17:0:ERROR:SCHEMASV:SCHEMAV_CVC_IDC: Element '{http://lca.jrc.it/ILCD/Common}class', attribute 'level': Warning: No precomputed value available, the value was either invalid or something strange happened.
 
 # Parse the required XML file to ContactDataset class.
@@ -49,7 +49,7 @@ dataSetInformation = contactDataset.contactInformation.dataSetInformation
 dataSetInformation.UUID
 >> 00000000-0000-0000-0000-000000000000
 dataSetInformation.UUID = "10000000-0000-0000-0000-000000000000"
-print(dataSetInformation.UUID)
+dataSetInformation.UUID
 >> 10000000-0000-0000-0000-000000000000
 
 ## Save final ContactDataset class as an XML file, make sure root directory exists.
