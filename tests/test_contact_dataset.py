@@ -13,6 +13,7 @@ def test_contact_information(contact_dataset: ContactDataSet) -> None:
     )
     assert isinstance(dataSetInformation.referenceToContact[0], GlobalReference)
     assert isinstance(dataSetInformation.referenceToLogo, GlobalReference)
+    assert dataSetInformation.UUID == "00000000-0000-0000-0000-000000000000"
 
 
 def test_administrative_information(contact_dataset: ContactDataSet) -> None:

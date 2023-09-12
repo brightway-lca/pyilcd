@@ -5,11 +5,9 @@ from io import StringIO
 from pathlib import Path
 from typing import Callable, List, Tuple, Union
 
-import pytest
 from lxml import etree
 
 from pyilcd.core import (
-    _check_common_lookup,
     parse_directory_contact_dataset,
     parse_directory_flow_dataset,
     parse_directory_flow_property_dataset,
@@ -25,12 +23,6 @@ from pyilcd.core import (
     validate_file_source_dataset,
     validate_file_unit_group_dataset,
 )
-
-
-def test_check_common_lookup() -> None:
-    """It validates file successfully."""
-    with pytest.raises(KeyError):
-        _check_common_lookup("undefined")
 
 
 def test_validate_file_process_dataset_success() -> None:

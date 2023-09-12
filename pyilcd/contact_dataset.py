@@ -13,6 +13,7 @@ from .common import (
 from .helpers import (
     create_attribute_contact_dataset,
     create_attribute_list_contact_dataset,
+    create_element_text_contact_dataset,
 )
 
 
@@ -62,7 +63,7 @@ class AdministrativeInformation(etree.ElementBase):
 class DataSetInformation(etree.ElementBase):
     """Data set information."""
 
-    commonUUID = create_attribute_contact_dataset("common:UUID", str)
+    UUID = create_element_text_contact_dataset("common:UUID", str)
     """Automatically generated Universally Unique Identifier of this data
     set. Together with the "Data set version", the UUID uniquely identifies each data
     set."""

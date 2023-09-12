@@ -76,6 +76,12 @@ def create_element_text_unit_group_dataset(name: str, element_type: type) -> pro
     return create_element_text(name, element_type, Defaults.SCHEMA_UNIT_GROUP_DATASET)
 
 
+def create_element_text_contact_dataset(name: str, element_type: type) -> property:
+    """Helper wrapper method for creating setters and getters for an ilcd
+    Contact element text"""
+    return create_element_text(name, element_type, Defaults.SCHEMA_CONTACT_DATASET)
+
+
 def create_attribute_list_process_dataset(name: str, attr_type: type) -> property:
     """Helper wrapper method for creating setters and getters for an ilcd
     Process Dataset element text list"""

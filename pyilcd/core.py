@@ -200,8 +200,8 @@ COMMON_LOOK_UP: Dict[str, type] = {
 def _check_common_lookup(name: str) -> type:
     try:
         return COMMON_LOOK_UP[name]
-    except KeyError as exc:
-        raise KeyError(f"Element {name} can't be found in custom lookup.") from exc
+    except KeyError:
+        return None
 
 
 class ProcessDatasetLookup(etree.CustomElementClassLookup):
