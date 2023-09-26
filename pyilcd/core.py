@@ -4,7 +4,15 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
 from lxml import etree
-from lxmlh.parsers import parse_directory, parse_file, save_file, validate_file
+from lxmlh import (
+    parse_directory,
+    parse_file,
+    parse_zip_file,
+    save_file,
+    validate_directory,
+    validate_file,
+    validate_zip_file,
+)
 
 from .common import (
     Category,
@@ -414,6 +422,258 @@ def validate_file_source_dataset(
     return validate_file(file, Defaults.SCHEMA_SOURCE_DATASET)
 
 
+def validate_directory_process_dataset(
+    dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a directory of ILCD Process Dataset XML files.
+    Parameters:
+    dir_path: the directory path, should contain ILCD Process Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_directory(
+        dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_PROCESS_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def validate_directory_flow_dataset(
+    dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a directory of ILCD Flow Dataset XML files.
+    Parameters:
+    dir_path: the directory path, should contain ILCD Flow Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_directory(
+        dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_FLOW_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def validate_directory_flow_property_dataset(
+    dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a directory of ILCD Flow Property Dataset XML files.
+    Parameters:
+    dir_path: the directory path, should contain ILCD Flow Property Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_directory(
+        dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_FLOW_PROPERTY_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def validate_directory_unit_group_dataset(
+    dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a directory of ILCD Unit Group Dataset XML files.
+    Parameters:
+    dir_path: the directory path, should contain ILCD Unit Group Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_directory(
+        dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_UNIT_GROUP_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def validate_directory_contact_dataset(
+    dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a directory of ILCD Contact Dataset XML files.
+    Parameters:
+    dir_path: the directory path, should contain ILCD Contact Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_directory(
+        dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_CONTACT_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def validate_directory_source_dataset(
+    dir_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a directory of ILCD Source Dataset XML files.
+    Parameters:
+    dir_path: the directory path, should contain ILCD Source Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_directory(
+        dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_SOURCE_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def validate_zip_file_process_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a ZIP FILE of ILCD Process Dataset XML files.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Process Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_zip_file(
+        file_path=file_path,
+        schema_path=Defaults.SCHEMA_PROCESS_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def validate_zip_file_flow_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a ZIP FILE of ILCD Flow Dataset XML files.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Flow Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_zip_file(
+        file_path=file_path,
+        schema_path=Defaults.SCHEMA_FLOW_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def validate_zip_file_flow_property_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a ZIP FILE of ILCD Flow Property Dataset XML files.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Flow Property Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_zip_file(
+        file_path=file_path,
+        schema_path=Defaults.SCHEMA_FLOW_PROPERTY_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def validate_zip_file_unit_group_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a ZIP FILE of ILCD Unit Group Dataset XML files.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Unit Group Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_zip_file(
+        file_path=file_path,
+        schema_path=Defaults.SCHEMA_UNIT_GROUP_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def validate_zip_file_contact_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a ZIP FILE of ILCD Contact Dataset XML files.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Contact Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_zip_file(
+        file_path=file_path,
+        schema_path=Defaults.SCHEMA_CONTACT_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def validate_zip_file_source_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, Union[None, List[str]]]]:
+    """Validates a ZIP FILE of ILCD Source Dataset XML files.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Source Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding list of errors, which
+    is ``None`` if no errors.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return validate_zip_file(
+        file_path=file_path,
+        schema_path=Defaults.SCHEMA_SOURCE_DATASET,
+        valid_suffixes=valid_suffixes,
+    )
+
+
 def parse_file_process_dataset(file: Union[str, Path, StringIO]) -> ProcessDataSet:
     """Parses an ILCD Process Dataset XML file to custom ILCD classes.
     Parameters:
@@ -612,6 +872,144 @@ def parse_directory_source_dataset(
 
     return parse_directory(
         dir_path=dir_path,
+        schema_path=Defaults.SCHEMA_SOURCE_DATASET,
+        lookup=SourceDatasetLookup(),
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def parse_zip_file_process_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, ProcessDataSet]]:
+    """Parses a ZIP file of ILCD Process Dataset XML files to a list of
+    custom ILCD classes.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Process Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding ILCD classes
+    representing the root of the XML file.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return parse_zip_file(
+        file_path=file_path,
+        schema_path=Defaults.SCHEMA_PROCESS_DATASET,
+        lookup=ProcessDatasetLookup(),
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def parse_zip_file_flow_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, FlowDataSet]]:
+    """Parses a ZIP file of ILCD Flow Dataset XML files to a list of
+    custom ILCD classes.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Flow Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding ILCD classes
+    representing the root of the XML file.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return parse_zip_file(
+        file_path=file_path,
+        schema_path=Defaults.SCHEMA_FLOW_DATASET,
+        lookup=FlowDatasetLookup(),
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def parse_zip_file_flow_property_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, FlowPropertyDataSet]]:
+    """Parses a ZIP file of ILCD Flow Property Dataset XML files to a list of
+    custom ILCD classes.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Flow Property Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding ILCD classes
+    representing the root of the XML file.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return parse_zip_file(
+        file_path=file_path,
+        schema_path=Defaults.SCHEMA_FLOW_PROPERTY_DATASET,
+        lookup=FlowPropertyDatasetLookup(),
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def parse_zip_file_unit_group_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, UnitGroupDataSet]]:
+    """Parses a ZIP file of ILCD Unit Group Dataset XML files to a list of
+    custom ILCD classes.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Unit Group Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding ILCD classes
+    representing the root of the XML file.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return parse_zip_file(
+        file_path=file_path,
+        schema_path=Defaults.SCHEMA_UNIT_GROUP_DATASET,
+        lookup=UnitGroupDatasetLookup(),
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def parse_zip_file_contact_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, ContactDataSet]]:
+    """Parses a ZIP file of ILCD Contact Dataset XML files to a list of
+    custom ILCD classes.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Contact Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding ILCD classes
+    representing the root of the XML file.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return parse_zip_file(
+        file_path=file_path,
+        schema_path=Defaults.SCHEMA_CONTACT_DATASET,
+        lookup=ContactDatasetLookup(),
+        valid_suffixes=valid_suffixes,
+    )
+
+
+def parse_zip_file_source_dataset(
+    file_path: Union[str, Path], valid_suffixes: Union[List[str], None] = None
+) -> List[Tuple[Path, SourceDataSet]]:
+    """Parses a ZIP file of ILCD Source Dataset XML files to a list of
+    custom ILCD classes.
+    Parameters:
+    file_path: the ZIP file path, should contain ILCD Source Dataset files.
+    valid_suffixes: a list of valid file suffixes which will only be considered for
+    parsing. If None, defaults to [".xml", ".ilcd"].
+    Returns a list of tuples of file paths and corresponding ILCD classes
+    representing the root of the XML file.
+    """
+    if valid_suffixes is None:
+        valid_suffixes = [".xml", ".ilcd"]
+
+    return parse_zip_file(
+        file_path=file_path,
         schema_path=Defaults.SCHEMA_SOURCE_DATASET,
         lookup=SourceDatasetLookup(),
         valid_suffixes=valid_suffixes,
