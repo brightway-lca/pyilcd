@@ -45,7 +45,7 @@ from .flow_property_dataset import FlowPropertyDataSet
 from .process_dataset import ProcessDataSet
 from .source_dataset import SourceDataSet
 from .unit_group_dataset import UnitGroupDataSet
-from .utils import get_version_tuple
+from .version import __version__
 
 __all__ = (
     "__version__",
@@ -94,6 +94,3 @@ __all__ = (
     "validate_zip_file_unit_group_dataset",
     "UnitGroupDataSet",
 )
-
-
-__version__ = get_version_tuple()
