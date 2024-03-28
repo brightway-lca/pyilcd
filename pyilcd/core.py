@@ -1,4 +1,5 @@
 """Core ILCD module containing parsing and saving functionalities."""
+
 from io import StringIO
 from pathlib import Path
 from typing import Dict, List, Tuple, Union

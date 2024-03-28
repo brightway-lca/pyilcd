@@ -1,4 +1,5 @@
 """Test suite for the pyilcd package."""
+
 from pathlib import Path
 
 DIR_DATA = Path(__file__).parents[1] / "data"

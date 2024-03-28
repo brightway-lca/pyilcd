@@ -1,4 +1,5 @@
 """Test cases for the __config__ module."""
+
 import os
 from pathlib import Path
 

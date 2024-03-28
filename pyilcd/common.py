@@ -1,4 +1,5 @@
 """Common custom ILCD Python classes."""
+
 from datetime import datetime
 from typing import List
 

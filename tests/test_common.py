@@ -1,4 +1,5 @@
 """Test cases for the __common__ module."""
+
 from pyilcd.common import (
     Category,
     Class,

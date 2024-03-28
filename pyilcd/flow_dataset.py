@@ -1,4 +1,5 @@
 """Custom ILCD Python classes for FlowDataSet of ILCD schema."""
+
 from typing import List
 
 from lxml import etree

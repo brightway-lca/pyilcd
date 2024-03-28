@@ -1,4 +1,5 @@
 """pyilcd."""
+
 from .config import Defaults
 from .contact_dataset import ContactDataSet
 from .core import (
@@ -45,7 +46,8 @@ from .flow_property_dataset import FlowPropertyDataSet
 from .process_dataset import ProcessDataSet
 from .source_dataset import SourceDataSet
 from .unit_group_dataset import UnitGroupDataSet
-from .version import __version__
+
+__version__ = "6.3.1"
 
 __all__ = (
     "__version__",
