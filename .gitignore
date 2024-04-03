@@ -130,3 +130,6 @@ dmypy.json
 
 # Output folder
 out/
+
+# VSCode
+.vscode
