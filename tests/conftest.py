@@ -5,8 +5,8 @@ import zipfile
 
 import pytest
 
-from pyilcd.contact_dataset import ContactDataSet
-from pyilcd.core import (
+from pyeilcd.contact_dataset import ContactDataSet
+from pyeilcd.core import (
     parse_file_contact_dataset,
     parse_file_flow_dataset,
     parse_file_flow_property_dataset,
@@ -14,11 +14,11 @@ from pyilcd.core import (
     parse_file_source_dataset,
     parse_file_unit_group_dataset,
 )
-from pyilcd.flow_dataset import FlowDataSet
-from pyilcd.flow_property_dataset import FlowPropertyDataSet
-from pyilcd.process_dataset import ProcessDataSet
-from pyilcd.source_dataset import SourceDataSet
-from pyilcd.unit_group_dataset import UnitGroupDataSet
+from pyeilcd.flow_dataset import FlowDataSet
+from pyeilcd.flow_property_dataset import FlowPropertyDataSet
+from pyeilcd.process_dataset import ProcessDataSet
+from pyeilcd.source_dataset import SourceDataSet
+from pyeilcd.unit_group_dataset import UnitGroupDataSet
 
 from . import (
     DIR_CONTACT_DATASET,

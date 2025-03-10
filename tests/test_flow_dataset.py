@@ -1,7 +1,7 @@
 """Test cases for the __flow_dataset__ module."""
 
-from pyilcd.common import GlobalReference
-from pyilcd.flow_dataset import (
+from pyeilcd.common import GlobalReference
+from pyeilcd.flow_dataset import (
     ComplianceDeclarations,
     DataEntryBy,
     FlowCategoryInformation,

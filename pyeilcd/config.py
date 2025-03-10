@@ -32,6 +32,9 @@ class Defaults:
     SCHEMA_SOURCE_DATASET: ClassVar[str] = os.path.join(
         SCHEMA_DIR, "ILCD_SourceDataSet.xsd"
     )
+    SCHEMA_MODEL_DATASET: ClassVar[str] = os.path.join(
+        SCHEMA_DIR, "ILCD_LifeCycleModelDataSet.xsd"
+    )
 
     DYNAMIC_DEFAULTS: ClassVar[
         Dict[str, Dict[str, Callable[[etree.ElementBase], str]]]

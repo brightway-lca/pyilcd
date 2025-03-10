@@ -1,7 +1,7 @@
 """Test cases for the __unit_group_dataset__ module."""
 
-from pyilcd.common import ClassificationInformation, GlobalReference
-from pyilcd.unit_group_dataset import (
+from pyeilcd.common import ClassificationInformation, GlobalReference
+from pyeilcd.unit_group_dataset import (
     DataEntryBy,
     QuantitativeReference,
     Unit,

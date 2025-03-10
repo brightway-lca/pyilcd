@@ -1,1 +1,1 @@
-include pyilcd/schemas/*.xsd
+include pyeilcd/schemas/*.xsd

@@ -1,6 +1,6 @@
 """Test cases for the __common__ module."""
 
-from pyilcd.common import (
+from pyeilcd.common import (
     Category,
     Class,
     Classification,
@@ -8,9 +8,9 @@ from pyilcd.common import (
     GlobalReference,
     Method,
 )
-from pyilcd.flow_dataset import FlowDataSet
-from pyilcd.process_dataset import ProcessDataSet
-from pyilcd.unit_group_dataset import UnitGroupDataSet
+from pyeilcd.flow_dataset import FlowDataSet
+from pyeilcd.process_dataset import ProcessDataSet
+from pyeilcd.unit_group_dataset import UnitGroupDataSet
 
 
 def test_classification_information(process_dataset: ProcessDataSet) -> None:

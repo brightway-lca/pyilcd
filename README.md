@@ -1,36 +1,43 @@
-# pyilcd
+# pyeilcd User Guide
 
-[![PyPI](https://img.shields.io/pypi/v/pyilcd.svg)][pypi status]
-[![Status](https://img.shields.io/pypi/status/pyilcd.svg)][pypi status]
-[![Python Version](https://img.shields.io/pypi/pyversions/pyilcd)][pypi status]
-[![License](https://img.shields.io/pypi/l/pyilcd)][license]
+[![PyPI](https://img.shields.io/pypi/v/pyeilcd.svg)][pypi status]
+[![Python Version](https://img.shields.io/pypi/pyversions/pyeilcd)][pypi status]
 
-[![Read the documentation at https://pyilcd.readthedocs.io/](https://img.shields.io/readthedocs/pyilcd/latest.svg?label=Read%20the%20Docs)][read the docs]
-[![Tests](https://github.com/sami-m-g/pyilcd/actions/workflows/python-test.yml/badge.svg)][tests]
-[![Codecov](https://codecov.io/gh/sami-m-g/pyilcd/branch/main/graph/badge.svg)][codecov]
+[pypi status]: https://pypi.org/project/pyeilcd/
 
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
-[![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
+[English](https://github.com/linancn/pyilcd/blob/main/README.md) | [中文](https://github.com/linancn/pyilcd/blob/main/README_CN.md)
 
-[pypi status]: https://pypi.org/project/pyilcd/
-[read the docs]: https://pyilcd.readthedocs.io/
-[tests]: https://github.com/sami-m-g/pyilcd/actions?workflow=Tests
-[codecov]: https://app.codecov.io/gh/sami-m-g/pyilcd
-[pre-commit]: https://github.com/pre-commit/pre-commit
-[black]: https://github.com/psf/black
+**Note:** This package supports Python versions 3.8 to 3.12 only.
 
-## Installation
+## 1. Introduction
 
-You can install _pyilcd_ via [pip] from [PyPI]:
+pyeilcd is a Python package that provides a simple interface to validate extended-ILCD (eILCD) XML files against the ILCD schemas. It is built on top of the [pyilcd](https://github.com/brightway-lca/pyilcd) library.
+
+---
+
+## 2. pyeilcd Usage
+
+### (1) Installation Instructions
+
+You can install _pyeilcd_ via [pip] from [PyPI]:
 
 ```console
-$ pip install pyilcd
+$ pip install pyeilcd
 ```
+### (2) Functionalities
 
-## Usage
+pyeilcd offers the following key functionalities:
+
+- Performs schema validation on eILCD XML files.
+
+- Supports multiple ILCD standard-compliant dataset types (e.g., ContactDataset, ProcessDataset, etc.).
+
+- ​Leverages core validation capabilities from [pyilcd](https://github.com/brightway-lca/pyilcd).    
+
+### (3) Usage Examples
 
 ```python
-from pyilcd import parse_file_contact_dataset, validate_file_contact_dataset, save_ilcd_file, Defaults
+from pyeilcd import validate_file_contact_dataset, Defaults
 
 # Override defaults if needed, else skip. Defaults are already set.
 Defaults.config_defaults("config.ini")  # Replace with your own config file
@@ -38,43 +45,27 @@ Defaults.config_defaults("config.ini")  # Replace with your own config file
 # Validate the ContactDataset class against the ContactDataset schema.
 validate_file_contact_dataset("data/invalid/sample_contact_invalid.xml")  # Replace with your own XML file
 >> data/contact/sample_contact_invalid.xml:17:0:ERROR:SCHEMASV:SCHEMAV_CVC_DATATYPE_VALID_1_2_1: Element '{http://lca.jrc.it/ILCD/Common}class', attribute 'level': 'a' is not a valid value of the atomic type '{http://lca.jrc.it/ILCD/Common}LevelType'. data/contact/sample_contact_invalid.xml:17:0:ERROR:SCHEMASV:SCHEMAV_CVC_IDC: Element '{http://lca.jrc.it/ILCD/Common}class', attribute 'level': Warning: No precomputed value available, the value was either invalid or something strange happened.
-
-# Parse the required XML file to ContactDataset class.
-contactDataset = parse_file_contact_dataset("data/contact/sample_contact.xml")  # Replace with your own XML file
-contactDataset
->> <Element {http://lca.jrc.it/ILCD/Contact}contactDataSet at 0x1c85f20c780>
-
-## Change whatever attributes you need changing.
-dataSetInformation = contactDataset.contactInformation.dataSetInformation
-dataSetInformation.UUID
->> 00000000-0000-0000-0000-000000000000
-dataSetInformation.UUID = "10000000-0000-0000-0000-000000000000"
-dataSetInformation.UUID
->> 10000000-0000-0000-0000-000000000000
-
-## Save final ContactDataset class as an XML file, make sure root directory exists.
-save_ilcd_file(contactDataset, "out/sample_contact_new.xml")  # Replace with your own path
 ```
 
-## Contributing
+## 3. Automatic Building and Publishing (CI/CD)
 
-Contributions are very welcome.
-To learn more, see the [Contributor Guide][Contributor Guide].
+This project supports automatic building and publishing. When you push a git tag named with the v<version> format to the repository, it will trigger the workflow automatically. For example:
 
-## License
+```bash
+#list existing tags
+git tag
+#creat a new tag
+git tag v7.0.12
+#push this tag to origin
+git push origin v7.0.12
 
-Distributed under the terms of the [GPL 3.0 license][License],
-_pyilcd_ is free and open source software.
+```
 
-## Issues
+## 4. License
 
-If you encounter any problems,
-please [file an issue][Issue Tracker] along with a detailed description.
+Distributed under the terms of the GPL 3.0 license,
+_pyeilcd_ is free and open source software.
 
 
-<!-- github-only -->
-
-[command-line reference]: https://pyilcd.readthedocs.io/en/latest/usage.html
-[License]: https://github.com/sami-m-g/pyilcd/blob/main/LICENSE
-[Contributor Guide]: https://github.com/sami-m-g/pyilcd/blob/main/CONTRIBUTING.md
-[Issue Tracker]: https://github.com/sami-m-g/pyilcd/issues
+[pip]: https://pip.pypa.io/en/stable/
+[PyPI]: https://pypi.org/project/pyeilcd/

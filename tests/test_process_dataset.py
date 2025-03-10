@@ -1,7 +1,7 @@
 """Test cases for the __process_dataset__ module."""
 
-from pyilcd.common import ClassificationInformation, GlobalReference
-from pyilcd.process_dataset import (
+from pyeilcd.common import ClassificationInformation, GlobalReference
+from pyeilcd.process_dataset import (
     Allocation,
     CommissionerAndGoal,
     CompletenessElementaryFlows,

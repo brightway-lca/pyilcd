@@ -3,12 +3,12 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pyilcd"
+name = "pyeilcd"
 authors = [
-  { name="Mina Sami", email="sami.mg@outlook.com" }
+  { name="Nan LI"}
 ]
 maintainers = [
-  { name="Mina Sami", email="sami.mg@outlook.com" }
+  { name="Nan LI"}
 ]
 description = "A Python package that converts ILCD XML formats to their Python equivalents and export the same data back to XML."
 readme = "README.md"
@@ -31,19 +31,17 @@ requires-python = ">=3.8"
 dependencies = [
     "lxml==4.9.2",
     "lxmlh>=1.2.0",
-    "pycasreg==0.1.0",
 ]
 
 [project.urls]
-source = "https://github.com/sami-m-g/pyilcd"
-homepage = "https://github.com/sami-m-g/pyilcd"
-tracker = "https://github.com/sami-m-g/pyilcd/issues"
+source = "https://github.com/linancn/pyilcd"
+homepage = "https://github.com/linancn/pyilcd"
 
 [project.optional-dependencies]
 # Getting recursive dependencies to work is a pain, this
 # seems to work, at least for now
 testing = [
-    "pyilcd",
+    "pyeilcd",
     "pytest",
     "pytest-cov",
     "python-coveralls"
@@ -63,13 +61,13 @@ dev = [
 [tool.setuptools]
 license-files = ["LICENSE"]
 include-package-data = true
-packages = ["pyilcd"]
+packages = ["pyeilcd"]
 
 [tool.setuptools.dynamic]
-version = {attr = "pyilcd.__version__"}
+version = {attr = "pyeilcd.__version__"}
 
 [tool.pytest.ini_options]
-addopts = "--cov pyilcd --cov-report term-missing --verbose"
+addopts = "--cov pyeilcd --cov-report term-missing --verbose"
 norecursedirs = [
     "dist",
     "build",

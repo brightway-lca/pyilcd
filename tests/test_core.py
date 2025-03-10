@@ -8,7 +8,7 @@ from typing import Callable, List, Tuple, Union
 
 from lxml import etree
 
-from pyilcd import (
+from pyeilcd import (
     ContactDataSet,
     FlowDataSet,
     FlowPropertyDataSet,

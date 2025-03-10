@@ -3,7 +3,7 @@
 import os
 from pathlib import Path
 
-from pyilcd.config import Defaults
+from pyeilcd.config import Defaults
 
 
 def test_config_defaults() -> None:

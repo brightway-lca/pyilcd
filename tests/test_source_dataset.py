@@ -1,7 +1,7 @@
 """Test cases for the __contact_dataset__ module."""
 
-from pyilcd.common import ClassificationInformation, GlobalReference
-from pyilcd.source_dataset import DataEntryBy, ReferenceToDigitalFile, SourceDataSet
+from pyeilcd.common import ClassificationInformation, GlobalReference
+from pyeilcd.source_dataset import DataEntryBy, ReferenceToDigitalFile, SourceDataSet
 
 
 def test_contact_information(source_dataset: SourceDataSet) -> None:
